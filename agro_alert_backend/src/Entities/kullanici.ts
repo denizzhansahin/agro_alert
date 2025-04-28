@@ -2,7 +2,6 @@ import {Field,Int, ObjectType} from "@nestjs/graphql"
 import { IsBase64 } from "class-validator";
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne, DeleteDateColumn, BeforeInsert, BeforeUpdate } from "typeorm";
 
-
 import * as bcrypt from 'bcrypt';
 import { CihazKullanici } from "./cihaz_kullanici";
 
@@ -44,17 +43,6 @@ export class Kullanici {
     @Column()
     @Field()
     tel_no:string
-
-
-
-    @Column()
-    @Field()
-    boy:number
-
-
-    @Column()
-    @Field()
-    kilo:number
 
 
     @Column({ type: 'text', nullable: true }) 

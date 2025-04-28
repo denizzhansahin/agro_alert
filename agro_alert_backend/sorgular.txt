@@ -1,0 +1,64 @@
+query {
+  kullanicilar {
+    id
+    nickname
+    isim
+    soyisim
+    tc_no
+    sehir
+    ilce
+    tam_adres
+    tel_no
+    profil_foto_base64
+    eposta
+    sifre
+    role
+    created_at
+    updated_at
+    cihaz_kullanici {id created_at}
+  }
+}
+
+
+mutation {
+  kullaniciOlustur(kullaniciData: {
+    nickname: "admin",
+    isim: "Admin",
+    soyisim: "Admin",
+    sehir: "exampleSehir",
+    ilce: "exampleIlce",
+    tam_adres: "exampleAdres",
+    tel_no: 1234567890,
+    profil_foto_base64: "exampleBase64String",
+    eposta: "admin@admin.com",
+    sifre: "admin",
+    role: "ADMIN"
+  }) {
+    id
+    nickname
+    isim
+    soyisim
+    
+    sehir
+    ilce
+    tam_adres
+    tel_no
+    profil_foto_base64
+    eposta
+    sifre
+    role
+    created_at
+    updated_at
+  }
+}
+
+query {
+  kullaniciBul(id: 1) {
+    id
+    nickname
+    isim
+    soyisim
+    eposta
+    role
+  }
+}

@@ -1,0 +1,130 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Uyarilar {
+  id: Int!
+  kullanici: Kullanici!
+  tespit: Tespitler
+  tetikleyen_gozlem: Gozlemler
+  uyari_seviyesi: String!
+  mesaj: String!
+  durum: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+  delete_at: DateTime
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Tespitler {
+  id: Int!
+  gozlem: Gozlemler
+  uyari: Uyarilar
+  tespit_tipi: String!
+  guven_skoru: Float
+  sinirlayici_kutu_verisi: String
+  created_at: DateTime!
+  updated_at: DateTime!
+  delete_at: DateTime
+}
+
+type Gozlemler {
+  id: Int!
+  cihaz: Cihazlar!
+  tespitler: [Tespitler!]!
+  gozlem_tipi: String!
+  sayisal_deger: Float
+  metin_deger: String
+  resim_base64: String
+  gps_enlem: Float
+  gps_boylam: Float
+  created_at: DateTime!
+  updated_at: DateTime!
+  delete_at: DateTime
+}
+
+type Cihazlar {
+  id: Int!
+  cihaz_seri_no: String!
+  notlar: String
+  isim: String
+  durum: String!
+  konum_enlem: Float
+  konum_boylam: Float
+  son_gorulme: DateTime
+  created_at: DateTime!
+  updated_at: DateTime!
+  delete_at: DateTime
+  cihaz_kullanici: CihazKullanici
+  gozlemler: [Gozlemler!]!
+}
+
+type CihazKullanici {
+  id: Int!
+  created_at: DateTime!
+  updated_at: DateTime!
+  delete_at: DateTime
+  kullanici: Kullanici!
+  cihazlar: [Cihazlar!]!
+}
+
+type Kullanici {
+  id: Int!
+  nickname: String!
+  isim: String!
+  soyisim: String!
+  sehir: String!
+  ilce: String!
+  tam_adres: String!
+  tel_no: String!
+  profil_foto_base64: String
+  eposta: String!
+  sifre: String!
+  role: String!
+  cihaz_kullanici: CihazKullanici
+  created_at: DateTime!
+  updated_at: DateTime
+  delete_at: DateTime
+}
+
+type Query {
+  kullanicilar: [Kullanici!]!
+  kullaniciBul(id: Float!): Kullanici!
+}
+
+type Mutation {
+  kullaniciOlustur(kullaniciData: KullaniciCreateDTO!): Kullanici!
+  kullaniciGuncelle(kullaniciId: Float!, kullaniciGuncelleData: KullaniciUpdateDTO!): Kullanici!
+}
+
+input KullaniciCreateDTO {
+  nickname: String!
+  isim: String!
+  soyisim: String!
+  sehir: String!
+  ilce: String!
+  tam_adres: String!
+  tel_no: String!
+  profil_foto_base64: String
+  eposta: String!
+  sifre: String!
+  role: String!
+}
+
+input KullaniciUpdateDTO {
+  nickname: String
+  isim: String
+  soyisim: String
+  sehir: String
+  ilce: String
+  tam_adres: String
+  tel_no: String
+  profil_foto_base64: String
+  eposta: String
+  sifre: String
+  role: String
+}
