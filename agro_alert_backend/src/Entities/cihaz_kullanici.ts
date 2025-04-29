@@ -2,6 +2,7 @@ import { Field, Int, ObjectType } from "@nestjs/graphql"
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne, DeleteDateColumn, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { Kullanici } from "./kullanici";
 import { Cihazlar } from "./cihazlar";
+import { Gozlemler } from "./gozlemler";
 
 
 @Entity({ name: 'cihaz_kullanici' })
@@ -32,5 +33,9 @@ export class CihazKullanici {
     @OneToMany(() => Cihazlar, (cihazlar) => cihazlar.cihaz_kullanici, { onDelete: 'SET NULL', cascade: true })
     @Field(() => [Cihazlar])
     cihazlar : Cihazlar[]
+
+    @OneToMany(() => Gozlemler, (gozlemler) => gozlemler.cihaz_kullanici, { onDelete: 'SET NULL', cascade: true }) // onDelete davranışını gözden geçirin
+    @Field(() => [Gozlemler])
+    gozlemler: Gozlemler[] 
 
 }

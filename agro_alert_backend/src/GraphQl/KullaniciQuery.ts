@@ -2,7 +2,6 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 
 import { Kullanici } from 'src/Entities/kullanici';
-import { KullanicilarService } from 'src/kullanicilar/kullanicilar.service';
 import { KullaniciCreateDTO } from 'src/DTO/kullanici-create.dto';
 import { KullaniciUpdateDTO } from 'src/DTO/kullanici-update.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
@@ -10,10 +9,11 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/enums/role.enum';
 import { Public } from 'src/auth/decorators/public.deacorator';
+import { KullaniciService } from 'src/kullanicilar/kullanicilar.service';
 
 @Resolver(() => Kullanici)
 export class KullaniciGraphQl {
-    constructor(private kullaniciService: KullanicilarService) { }
+    constructor(private kullaniciService: KullaniciService) { }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.ADMIN)

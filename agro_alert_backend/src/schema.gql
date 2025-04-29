@@ -2,11 +2,29 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Cihazlar {
+  id: Int!
+  cihaz_seri_no: String!
+  notlar: String
+  isim: String
+  durum: String!
+  konum_enlem: Float
+  konum_boylam: Float
+  son_gorulme: DateTime
+  created_at: DateTime!
+  updated_at: DateTime!
+  delete_at: DateTime
+  cihaz_kullanici: CihazKullanici
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Uyarilar {
   id: Int!
-  kullanici: Kullanici!
   tespit: Tespitler
-  tetikleyen_gozlem: Gozlemler
   uyari_seviyesi: String!
   mesaj: String!
   durum: String!
@@ -14,11 +32,6 @@ type Uyarilar {
   updated_at: DateTime!
   delete_at: DateTime
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type Tespitler {
   id: Int!
@@ -34,7 +47,7 @@ type Tespitler {
 
 type Gozlemler {
   id: Int!
-  cihaz: Cihazlar!
+  cihaz_kullanici: CihazKullanici!
   tespitler: [Tespitler!]!
   gozlem_tipi: String!
   sayisal_deger: Float
@@ -47,22 +60,6 @@ type Gozlemler {
   delete_at: DateTime
 }
 
-type Cihazlar {
-  id: Int!
-  cihaz_seri_no: String!
-  notlar: String
-  isim: String
-  durum: String!
-  konum_enlem: Float
-  konum_boylam: Float
-  son_gorulme: DateTime
-  created_at: DateTime!
-  updated_at: DateTime!
-  delete_at: DateTime
-  cihaz_kullanici: CihazKullanici
-  gozlemler: [Gozlemler!]!
-}
-
 type CihazKullanici {
   id: Int!
   created_at: DateTime!
@@ -70,6 +67,7 @@ type CihazKullanici {
   delete_at: DateTime
   kullanici: Kullanici!
   cihazlar: [Cihazlar!]!
+  gozlemler: [Gozlemler!]!
 }
 
 type Kullanici {
@@ -94,11 +92,15 @@ type Kullanici {
 type Query {
   kullanicilar: [Kullanici!]!
   kullaniciBul(id: Float!): Kullanici!
+  getCihazById(id: Int!): Cihazlar!
+  getAllCihazlar: [Cihazlar!]!
 }
 
 type Mutation {
   kullaniciOlustur(kullaniciData: KullaniciCreateDTO!): Kullanici!
   kullaniciGuncelle(kullaniciId: Float!, kullaniciGuncelleData: KullaniciUpdateDTO!): Kullanici!
+  createCihaz(createCihazDto: CreateCihazDto!): Cihazlar!
+  updateCihaz(id: Int!, updateCihazDto: UpdateCihazDto!): Cihazlar!
 }
 
 input KullaniciCreateDTO {
@@ -127,4 +129,25 @@ input KullaniciUpdateDTO {
   eposta: String
   sifre: String
   role: String
+}
+
+input CreateCihazDto {
+  cihaz_seri_no: String!
+  notlar: String
+  isim: String
+  durum: String!
+  konum_enlem: Float
+  konum_boylam: Float
+  son_gorulme: DateTime
+}
+
+input UpdateCihazDto {
+  cihaz_seri_no: String
+  notlar: String
+  isim: String
+  durum: String
+  konum_enlem: Float
+  konum_boylam: Float
+  son_gorulme: DateTime
+  id: Int!
 }

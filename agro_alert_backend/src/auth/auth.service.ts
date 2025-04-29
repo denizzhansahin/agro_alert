@@ -2,18 +2,17 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigType } from '@nestjs/config';
 import { Inject } from '@nestjs/common';
-
+import refreshJwtConfig from './config/refresh-jwt.config';
+import { CurrentUser } from './types/current-user';
+import { AuthJwtPayload } from './types/auth-jwtPayload';
 import * as bcrypt from 'bcrypt';
 import { compare } from 'bcrypt';
-import { KullanicilarService } from 'src/kullanicilar/kullanicilar.service';
-import refreshJwtConfig from './config/refresh-jwt.config';
-import { AuthJwtPayload } from './types/auth-jwtPayload';
-import { CurrentUser } from './types/current-user';
+import { KullaniciService } from 'src/kullanicilar/kullanicilar.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: KullanicilarService,
+    private userService: KullaniciService,
     private jwtService: JwtService,
     @Inject(refreshJwtConfig.KEY) private refreshTokenConfig: ConfigType<typeof refreshJwtConfig>
   ) {}

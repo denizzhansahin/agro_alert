@@ -62,3 +62,72 @@ query {
     role
   }
 }
+
+
+query {
+  getAllCihazlar {
+    id
+    cihaz_seri_no
+    notlar
+    isim
+    durum
+    konum_enlem
+    konum_boylam
+    son_gorulme
+    created_at
+    updated_at
+    delete_at
+  }
+}
+
+
+
+
+mutation CreateCihaz($createCihazDto: CreateCihazDto!) {
+  createCihaz(createCihazDto: $createCihazDto) {
+    id
+    cihaz_seri_no
+    notlar
+    isim
+    durum
+    konum_enlem
+    konum_boylam
+    son_gorulme
+    created_at
+    updated_at
+    delete_at
+  }
+}
+
+{
+  "createCihazDto": {
+    "cihaz_seri_no": "123456789",
+    "notlar": "Test cihazı",
+    "isim": "Cihaz 1",
+    "durum": "Aktif",
+    "konum_enlem": 40.7128,
+    "konum_boylam": -74.0060,
+    "son_gorulme": "2023-10-01T12:00:00Z"
+  }
+}
+
+
+query GetCihazById($id: Int!) {
+  getCihazById(id: $id) {
+    id
+    cihaz_seri_no
+    notlar
+    isim
+    durum
+    konum_enlem
+    konum_boylam
+    son_gorulme
+    created_at
+    updated_at
+    delete_at
+  }
+}
+
+{
+  "id": 1
+}

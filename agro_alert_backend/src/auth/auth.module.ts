@@ -11,7 +11,7 @@ import refreshJwtConfig from './config/refresh-jwt.config';
 import { Kullanici } from 'src/Entities/kullanici';
 import { LocalStrategy } from './strategy/local.strategy';
 import { JwtStrategy } from './strategy/jwt.strategy';
-import { KullanicilarService } from 'src/kullanicilar/kullanicilar.service';
+import { KullaniciService } from 'src/kullanicilar/kullanicilar.service';
 
 
 @Module({
@@ -23,7 +23,7 @@ import { KullanicilarService } from 'src/kullanicilar/kullanicilar.service';
     JwtModule.registerAsync(jwtConfig.asProvider()),
     TypeOrmModule.forFeature([Kullanici]),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, KullanicilarService],
+  providers: [AuthService, LocalStrategy, JwtStrategy, KullaniciService],
   controllers: [AuthController],
 })
 export class AuthModule {}

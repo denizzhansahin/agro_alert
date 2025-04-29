@@ -3,7 +3,6 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 
 
 import { CihazKullanici } from "./cihaz_kullanici";
-import { Gozlemler } from "./gozlemler";
 
 
 @Entity({ name: 'cihazlar' })
@@ -60,8 +59,7 @@ export class Cihazlar {
     @ManyToOne(() => CihazKullanici, (cihaz_kullanici) => cihaz_kullanici.cihazlar)
     @Field(() => CihazKullanici, { nullable: true }) 
     cihaz_kullanici: CihazKullanici; 
-    @OneToMany(() => Gozlemler, (gozlemler) => gozlemler.cihaz, { onDelete: 'SET NULL', cascade: true }) // onDelete davranışını gözden geçirin
-    @Field(() => [Gozlemler])
-    gozlemler: Gozlemler[] 
+    
+
 
 }

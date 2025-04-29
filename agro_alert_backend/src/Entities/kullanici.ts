@@ -55,7 +55,7 @@ export class Kullanici {
     eposta:string
 
     @Column()
-     @Field() 
+    @Field()
     sifre:string
 
     @Column()

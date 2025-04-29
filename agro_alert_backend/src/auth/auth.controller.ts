@@ -4,7 +4,6 @@ import { AuthService } from './auth.service';
 import { Public } from './decorators/public.deacorator';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 
-
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -16,6 +15,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(@Request() req) {
+    console.log("login controller")
     //kullanıcı id bilgisine göre token oluşturma
     const userData = this.authService.login(req.user.id)
     console.log("token alma")

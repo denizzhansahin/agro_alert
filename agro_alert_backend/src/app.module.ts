@@ -17,6 +17,8 @@ import { Cihazlar } from './Entities/cihazlar';
 import { Gozlemler } from './Entities/gozlemler';
 import { Tespitler } from './Entities/tespitler';
 import { Uyarilar } from './Entities/uyarilar';
+import { CihazlarModule } from './cihazlar/cihazlar.module';
+import { CihazlarGraphQl } from './GraphQl/CihazlarQuery';
 
 @Module({
   imports: [
@@ -37,11 +39,13 @@ import { Uyarilar } from './Entities/uyarilar';
 
     AuthModule,
     KullanicilarModule,
+    CihazlarModule
   ],
   controllers: [AppController],
   providers: [
     AppService,
     KullaniciGraphQl,
+    CihazlarGraphQl,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard, // Tüm endpoint'leri JWT ile koru

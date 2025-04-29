@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql"
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne, DeleteDateColumn, BeforeInsert, BeforeUpdate, ManyToOne, OneToMany } from "typeorm";
-import { Cihazlar } from "./cihazlar";
 import { Tespitler } from "./tespitler";
+import { CihazKullanici } from "./cihaz_kullanici";
 
 
 @Entity({ name: 'gozlemler' })
@@ -11,13 +11,15 @@ export class Gozlemler {
     @Field((type) => Int)
     id: number
 
-    @ManyToOne(() => Cihazlar, (cihaz) => cihaz.gozlemler)
-    @Field(() => Cihazlar, { nullable: false })
-    cihaz: Cihazlar; 
+    @ManyToOne(() => CihazKullanici, (cihaz_kullanici) => cihaz_kullanici.gozlemler)
+    @Field(() => CihazKullanici, { nullable: false })
+    cihaz_kullanici: CihazKullanici; 
 
     @OneToMany(() => Tespitler, (tespitler) => tespitler.gozlem, { onDelete: 'SET NULL', cascade: true })
     @Field(() => [Tespitler])
     tespitler: Tespitler[] 
+
+    
 
     @Column()
     @Field()

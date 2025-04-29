@@ -12,23 +12,12 @@ export class Uyarilar {
     @Field((type) => Int)
     id: number
 
-    // Uyarının hangi kullanıcıya gönderileceği bilgisi eksik
-    @ManyToOne(() => Kullanici) // Varsayılan: Bir uyarı bir kullanıcıya gider
-    @JoinColumn({ name: 'kullaniciId' })
-    @Field(() => Kullanici)
-    kullanici: Kullanici;
-
     // Uyarının hangi tespitten tetiklendiği (OneToOne ilişki Tespitler'den kuruldu)
     @OneToOne(() => Tespitler, tespit => tespit.uyari)
     @JoinColumn({ name: 'tespitId' }) // İlişkiyi kuran FK sütunu (tespitId)
     @Field(() => Tespitler, { nullable: true }) // Tespit silinirse null olabilir veya cascade ile uyarı da silinir (Tespitler entity'sinde ayarlanır)
     tespit: Tespitler;
 
-    // Uyarıyı tetikleyen Gözlem (Opsiyonel, eğer sensör verisi tetikliyorsa)
-    @ManyToOne(() => Gozlemler, { nullable: true })
-    @JoinColumn({ name: 'gozlemId' })
-    @Field(() => Gozlemler, { nullable: true })
-    tetikleyen_gozlem: Gozlemler; // İsmi daha açıklayıcı yapalım
 
     @Column()
     @Field()
