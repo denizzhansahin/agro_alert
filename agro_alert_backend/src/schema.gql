@@ -94,6 +94,9 @@ type Query {
   kullaniciBul(id: Float!): Kullanici!
   getCihazById(id: Int!): Cihazlar!
   getAllCihazlar: [Cihazlar!]!
+  allCihazKullanicilar: [CihazKullanici!]!
+  cihazKullaniciById(id: Int!): CihazKullanici!
+  cihazKullaniciByKullaniciId(kullaniciId: Int!): CihazKullanici
 }
 
 type Mutation {
@@ -101,6 +104,9 @@ type Mutation {
   kullaniciGuncelle(kullaniciId: Float!, kullaniciGuncelleData: KullaniciUpdateDTO!): Kullanici!
   createCihaz(createCihazDto: CreateCihazDto!): Cihazlar!
   updateCihaz(id: Int!, updateCihazDto: UpdateCihazDto!): Cihazlar!
+  createCihazKullaniciForUser(kullaniciId: Int!): CihazKullanici!
+  assignCihazToKullanici(kullaniciId: Int!, cihazId: Int!): CihazKullanici!
+  removeCihazFromKullanici(kullaniciId: Int!, cihazId: Int!): Boolean!
 }
 
 input KullaniciCreateDTO {

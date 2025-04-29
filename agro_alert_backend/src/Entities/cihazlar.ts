@@ -57,8 +57,8 @@ export class Cihazlar {
     delete_at: Date
 
     @ManyToOne(() => CihazKullanici, (cihaz_kullanici) => cihaz_kullanici.cihazlar)
-    @Field(() => CihazKullanici, { nullable: true }) 
-    cihaz_kullanici: CihazKullanici; 
+    @Field(() => CihazKullanici, { nullable: true }) // GraphQL için nullable doğru
+    cihaz_kullanici: CihazKullanici | null;
     
 
 

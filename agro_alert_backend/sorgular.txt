@@ -131,3 +131,122 @@ query GetCihazById($id: Int!) {
 {
   "id": 1
 }
+
+
+
+query {
+  allCihazKullanicilar {
+    id
+    created_at
+    kullanici {
+      id
+      nickname
+      eposta
+    }
+    cihazlar {
+      id
+      cihaz_seri_no
+      isim
+    }
+  }
+}
+
+
+mutation ($kullaniciId: Int!) {
+  createCihazKullaniciForUser(kullaniciId: $kullaniciId) {
+    id
+    created_at
+    kullanici {
+      id
+      nickname
+    }
+    cihazlar {
+      id
+    }
+  }
+}
+{
+  "kullaniciId": 1
+}
+
+
+mutation ($kullaniciId: Int!, $cihazId: Int!) {
+  assignCihazToKullanici(kullaniciId: $kullaniciId, cihazId: $cihazId) {
+    id
+    kullanici {
+      id
+      nickname
+    }
+    cihazlar {
+      id
+      cihaz_seri_no
+      isim
+    }
+  }
+}
+
+{
+  "kullaniciId": 1,
+  "cihazId": 1
+}
+
+
+
+mutation ($id: Int!) {
+  removeCihazKullanici(id: $id)
+}
+{
+  "id": 1
+}
+
+
+# Query: cihazKullaniciByKullaniciId
+query ($kullaniciId: Int!) {
+  cihazKullaniciByKullaniciId(kullaniciId: $kullaniciId) {
+    id
+    created_at
+    kullanici {
+      id
+      nickname
+    }
+    cihazlar {
+      id
+      cihaz_seri_no
+      isim
+    }
+  }
+}
+
+{
+  "kullaniciId": 1
+}
+
+
+# Query: cihazKullaniciById
+query ($id: Int!) {
+  cihazKullaniciById(id: $id) {
+    id
+    created_at
+    updated_at
+    kullanici {
+      id
+      nickname
+      isim
+      soyisim
+    }
+    cihazlar {
+      id
+      cihaz_seri_no
+      isim
+      durum
+    }
+    gozlemler {
+      id
+      gozlem_tipi
+      created_at
+    }
+  }
+}
+{
+  "id": 2
+}

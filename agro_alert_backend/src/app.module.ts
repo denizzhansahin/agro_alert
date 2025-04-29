@@ -19,6 +19,7 @@ import { Tespitler } from './Entities/tespitler';
 import { Uyarilar } from './Entities/uyarilar';
 import { CihazlarModule } from './cihazlar/cihazlar.module';
 import { CihazlarGraphQl } from './GraphQl/CihazlarQuery';
+import { CihazKullaniciModule } from './cihaz_kullanici/cihaz_kullanici.module';
 
 @Module({
   imports: [
@@ -39,7 +40,8 @@ import { CihazlarGraphQl } from './GraphQl/CihazlarQuery';
 
     AuthModule,
     KullanicilarModule,
-    CihazlarModule
+    CihazlarModule,
+    CihazKullaniciModule
   ],
   controllers: [AppController],
   providers: [
