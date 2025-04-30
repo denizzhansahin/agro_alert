@@ -1,6 +1,12 @@
 /agro_alert_backend/dist
 /agro_alert_backend/node_modules
 
+/agro_alert_web/dist
+/agro_alert_web/node_modules
+/agro_alert_web/.next
+
+/agro_alert_web/out/
+/agro_alert_web/build
 
 
 # Logs
