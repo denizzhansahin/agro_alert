@@ -360,3 +360,84 @@ mutation {
     }
   }
 }
+
+
+
+
+
+
+
+mutation {
+  createUyari(createUyariData: {
+    kullaniciId: 3,
+    tespitId: 1,
+    uyari_seviyesi: "High",
+    mesaj: "Anomaly detected",
+    durum: "Active"
+  }) {
+    id
+    uyari_seviyesi
+    mesaj
+    durum
+    created_at
+    updated_at
+    tespit {
+      id
+      tespit_tipi
+      guven_skoru
+    }
+  }
+}
+
+
+
+query {
+  uyariByTespitId(tespitId: 1) {
+    id
+    uyari_seviyesi
+    mesaj
+    durum
+    created_at
+    updated_at
+    tespit {
+      id
+      tespit_tipi
+      guven_skoru
+    }
+  }
+}
+
+
+
+query {
+  uyarilarByKullaniciId(kullaniciId: 1) {
+    id
+    uyari_seviyesi
+    mesaj
+    durum
+    created_at
+    updated_at
+    tespit {
+      id
+      tespit_tipi
+      guven_skoru
+    }
+  }
+}
+
+
+query {
+  uyariById(id: 1) {
+    id
+    uyari_seviyesi
+    mesaj
+    durum
+    created_at
+    updated_at
+    tespit {
+      id
+      tespit_tipi
+      guven_skoru
+    }
+  }
+}

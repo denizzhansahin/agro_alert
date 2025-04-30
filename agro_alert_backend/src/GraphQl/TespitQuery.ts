@@ -4,16 +4,17 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';     // Yolu doğru
 import { Tespitler } from 'src/Entities/tespitler';
 import { TespitlerService } from 'src/tespitler/tespitler.service';
 import { CreateTespitlerDto } from 'src/DTO/create-tespitler.dto';
-// import { RolesGuard } from '../auth/guards/roles.guard'; // Roller gerekmiyorsa kaldırılabilir
-// import { Roles } from '../auth/decorators/roles.decorator'; // Roller gerekmiyorsa kaldırılabilir
-// import { Role } from '../auth/enums/role.enum'; // Roller gerekmiyorsa kaldırılabilir
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/enums/role.enum';
+
 
 
 @Resolver(() => Tespitler)
 @UseGuards(JwtAuthGuard) // Giriş yapmış olmayı zorunlu kıl
 // @UseGuards(JwtAuthGuard, RolesGuard) // Rol kontrolü de gerekirse bu satırı kullanın
 export class TespitlerResolver {
-    constructor(private readonly tespitlerService: TespitlerService) {}
+    constructor(private readonly tespitlerService: TespitlerService) { }
 
     // --- Queries ---
 
@@ -21,6 +22,8 @@ export class TespitlerResolver {
      * Belirtilen Gozlem ID'sine ait tüm tespitleri getirir.
      */
     // @Roles(Role.ADMIN, Role.USER) // Gerekirse rol bazlı erişim ekleyin
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.ADMIN)
     @Query(() => [Tespitler], { name: 'tespitlerByGozlemId' })
     async findTespitlerByGozlemId(
         @Args('gozlemId', { type: () => Int }) gozlemId: number,
@@ -33,6 +36,8 @@ export class TespitlerResolver {
      * Bulunamazsa null döner.
      */
     // @Roles(Role.ADMIN, Role.USER) // Gerekirse rol bazlı erişim ekleyin
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.ADMIN)
     @Query(() => Tespitler, { name: 'tespitById', nullable: true })
     async findTespitById(
         @Args('id', { type: () => Int }) id: number,
@@ -56,6 +61,8 @@ export class TespitlerResolver {
      * Yeni bir tespit oluşturur.
      */
     // @Roles(Role.ADMIN, Role.USER) // Gerekirse rol bazlı erişim ekleyin
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.ADMIN)
     @Mutation(() => Tespitler, { name: 'createTespit' })
     async createTespit(
         @Args('createTespitData', { type: () => CreateTespitlerDto }) createTespitData: CreateTespitlerDto,

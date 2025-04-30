@@ -16,7 +16,7 @@ export class Uyarilar {
     @OneToOne(() => Tespitler, tespit => tespit.uyari)
     @JoinColumn({ name: 'tespitId' }) // İlişkiyi kuran FK sütunu (tespitId)
     @Field(() => Tespitler, { nullable: true }) // Tespit silinirse null olabilir veya cascade ile uyarı da silinir (Tespitler entity'sinde ayarlanır)
-    tespit: Tespitler;
+    tespit: Tespitler | null // Nullable olmalı, çünkü tespit silinirse uyarı kalabilir;
 
 
     @Column()
