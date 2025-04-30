@@ -306,3 +306,57 @@ query {
     }
   }
 }
+
+
+
+
+query {
+  tespitlerByGozlemId(gozlemId: 1) {
+    id
+    tespit_tipi
+    guven_skoru
+    sinirlayici_kutu_verisi
+    created_at
+    updated_at
+    gozlem {
+      id
+      gozlem_tipi
+    }
+  }
+}
+
+query {
+  tespitById(id: 1) {
+    id
+    tespit_tipi
+    guven_skoru
+    sinirlayici_kutu_verisi
+    created_at
+    updated_at
+    gozlem {
+      id
+      gozlem_tipi
+    }
+  }
+}
+
+
+mutation {
+  createTespit(createTespitData: {
+    gozlemId: 1,
+    tespit_tipi: "Anomaly",
+    guven_skoru: 0.95,
+    sinirlayici_kutu_verisi: "BoundingBoxData"
+  }) {
+    id
+    tespit_tipi
+    guven_skoru
+    sinirlayici_kutu_verisi
+    created_at
+    updated_at
+    gozlem {
+      id
+      gozlem_tipi
+    }
+  }
+}

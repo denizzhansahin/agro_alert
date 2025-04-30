@@ -100,6 +100,8 @@ type Query {
   allGozlemler: [Gozlemler!]!
   gozlemById(id: Int!): Gozlemler
   gozlemlerByCihazKullaniciId(cihazKullaniciId: Int!): [Gozlemler!]!
+  tespitlerByGozlemId(gozlemId: Int!): [Tespitler!]!
+  tespitById(id: Int!): Tespitler
 }
 
 type Mutation {
@@ -111,6 +113,7 @@ type Mutation {
   assignCihazToKullanici(kullaniciId: Int!, cihazId: Int!): CihazKullanici!
   removeCihazFromKullanici(kullaniciId: Int!, cihazId: Int!): Boolean!
   createGozlem(createGozlemData: CreateGozlemlerDto!): Gozlemler!
+  createTespit(createTespitData: CreateTespitlerDto!): Tespitler!
 }
 
 input KullaniciCreateDTO {
@@ -170,4 +173,11 @@ input CreateGozlemlerDto {
   resim_base64: String
   gps_enlem: Float
   gps_boylam: Float
+}
+
+input CreateTespitlerDto {
+  gozlemId: Float!
+  tespit_tipi: String!
+  guven_skoru: Float
+  sinirlayici_kutu_verisi: String
 }

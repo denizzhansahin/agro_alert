@@ -18,7 +18,7 @@ export class Tespitler {
 
     @OneToOne(() => Uyarilar, uyarilar => uyarilar.tespit, { cascade: true, onDelete: 'CASCADE' }) 
     @Field(() => Uyarilar, { nullable: true }) 
-    uyari: Uyarilar; 
+    uyari: Uyarilar | null; 
 
     @Column()
     @Field()
