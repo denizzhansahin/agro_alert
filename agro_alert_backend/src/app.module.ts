@@ -20,6 +20,7 @@ import { Uyarilar } from './Entities/uyarilar';
 import { CihazlarModule } from './cihazlar/cihazlar.module';
 import { CihazlarGraphQl } from './GraphQl/CihazlarQuery';
 import { CihazKullaniciModule } from './cihaz_kullanici/cihaz_kullanici.module';
+import { GozlemlerModule } from './gozlemler/gozlemler.module';
 
 @Module({
   imports: [
@@ -41,7 +42,8 @@ import { CihazKullaniciModule } from './cihaz_kullanici/cihaz_kullanici.module';
     AuthModule,
     KullanicilarModule,
     CihazlarModule,
-    CihazKullaniciModule
+    CihazKullaniciModule,
+    GozlemlerModule
   ],
   controllers: [AppController],
   providers: [
