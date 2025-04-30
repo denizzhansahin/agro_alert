@@ -1,0 +1,1 @@
+npm.cmd install @reduxjs/toolkit @types/react-datepicker axios date-fns dayjs framer-motion graphql lucide-react react-circular-progressbar react-datepicker react-hook-form react-redux recharts redux sharp styled-components
