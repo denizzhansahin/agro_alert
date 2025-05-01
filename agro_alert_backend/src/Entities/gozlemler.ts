@@ -13,11 +13,11 @@ export class Gozlemler {
 
     @ManyToOne(() => CihazKullanici, (cihaz_kullanici) => cihaz_kullanici.gozlemler)
     @Field(() => CihazKullanici, { nullable: false })
-    cihaz_kullanici: CihazKullanici; 
+    cihaz_kullanici: CihazKullanici |null; 
 
     @OneToMany(() => Tespitler, (tespitler) => tespitler.gozlem, { onDelete: 'SET NULL', cascade: true })
     @Field(() => [Tespitler])
-    tespitler: Tespitler[] 
+    tespitler: Tespitler[] |null
 
     
 

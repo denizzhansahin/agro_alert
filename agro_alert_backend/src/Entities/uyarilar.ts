@@ -1,8 +1,7 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql"
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne, DeleteDateColumn, BeforeInsert, BeforeUpdate, ManyToOne, OneToMany, JoinColumn } from "typeorm";
 import { Tespitler } from "./tespitler";
-import { Kullanici } from "./kullanici"; // Kullanıcıya da bağlanmalı
-import { Gozlemler } from "./gozlemler"; // Gözleme de bağlanabilir
+
 
 
 @Entity({ name: 'uyarilar' })

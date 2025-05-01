@@ -64,7 +64,7 @@ export class Kullanici {
 
     @OneToOne(() => CihazKullanici, cihaz_kullanici => cihaz_kullanici.kullanici)
     @Field(() => CihazKullanici, { nullable: true })
-    cihaz_kullanici: CihazKullanici;
+    cihaz_kullanici: CihazKullanici |null;
 
     @CreateDateColumn()
     @Field()
