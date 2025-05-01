@@ -54,7 +54,7 @@ export default function CihazKullaniciIslemleriTabs() {
           <Tab label="Cihaz Kullanici Tablosu" {...a11yProps(0)} />
           <Tab label="Cihaz Kullanici Ekle" {...a11yProps(1)} />
           <Tab label="Cihaz Kullanici Bilgi" {...a11yProps(2)} />
-          <Tab label="Cihaz Kullanici İliki Tablosu" {...a11yProps(3)} />
+          <Tab label="Cihaz Kullanici İlişki Tablosu" {...a11yProps(3)} />
           <Tab label="Cihaz Kullanici İlişki Kaldır" {...a11yProps(4)} />
         </Tabs>
       </Box>

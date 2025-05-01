@@ -85,7 +85,7 @@ export class GozlemlerService {
 
        return this.gozlemlerRepository.find({
            where: { cihaz_kullanici: { id: cihazKullaniciId } },
-           relations: ['cihaz_kullanici', 'tespitler', 'cihaz_kullanici.kullanici'],
+           relations: ['cihaz_kullanici', 'tespitler', 'cihaz_kullanici.kullanici','cihaz_kullanici.cihazlar'],
            order: { created_at: 'DESC' }
        });
    }
@@ -96,7 +96,7 @@ export class GozlemlerService {
    async findOneById(id: number): Promise<Gozlemler> {
        const gozlem = await this.gozlemlerRepository.findOne({
            where: { id },
-           relations: ['cihaz_kullanici', 'tespitler', 'cihaz_kullanici.kullanici']
+           relations: ['cihaz_kullanici', 'tespitler', 'cihaz_kullanici.kullanici','cihaz_kullanici.cihazlar']
        });
        if (!gozlem) {
            throw new NotFoundException(`ID'si ${id} olan Gözlem bulunamadı.`);
@@ -107,7 +107,7 @@ export class GozlemlerService {
    async findAll(): Promise<Gozlemler[]> {
     // İlişkileri yüklemek isteyip istemediğinize karar verin
     return this.gozlemlerRepository.find({
-         relations: ['cihaz_kullanici', 'cihaz_kullanici.kullanici','tespitler'], // Örnek: İlişkili kullanıcıyı da yükle
+         relations: ['cihaz_kullanici', 'cihaz_kullanici.kullanici','tespitler','cihaz_kullanici.cihazlar'], // Örnek: İlişkili kullanıcıyı da yükle
          order: { created_at: 'DESC' } // Örnek sıralama
     });
 }

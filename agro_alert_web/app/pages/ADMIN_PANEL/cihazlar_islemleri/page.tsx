@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import PageCihazlarTable from './cihaz_list/page';
 import CihazEkle from './cihaz_ekle/page';
 import CihazEdit from './cihaz_edit/page';
+import CihazBilgi from './cihaz_bilgi/page';
 
 
 
@@ -54,6 +55,7 @@ export default function CihazlarIslemleriTabs() {
           <Tab label="Cihazlar Tablosu" {...a11yProps(0)} />
           <Tab label="Cihaz Ekle" {...a11yProps(1)} />
           <Tab label="Cihaz Güncelleme" {...a11yProps(2)} />
+          <Tab label="Cihaz Bilgi" {...a11yProps(3)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
@@ -65,7 +67,9 @@ export default function CihazlarIslemleriTabs() {
       <CustomTabPanel value={value} index={2}>
         <CihazEdit/>
       </CustomTabPanel>
-
+      <CustomTabPanel value={value} index={3}>
+        <CihazBilgi/>
+      </CustomTabPanel>
     </Box>
   );
 }

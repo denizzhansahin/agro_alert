@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 import { useQuery } from '@apollo/client';
@@ -20,18 +20,22 @@ const columns: GridColDef[] = [
 
 function DataTable({ kullaniciId }: { kullaniciId: number }) {
   const { data, loading, error } = useQuery(GET_CIHAZ_KULLANICI_BY_KULLANICI_ID, {
-    variables: { kullaniciId },
+    variables: { kullaniciId: parseInt(kullaniciId.toString()) }, // Ensure it's an integer
     skip: !kullaniciId,
   });
 
-  const rows = (data?.cihazKullaniciByKullaniciId ? [data.cihazKullaniciByKullaniciId] : []).map((record) => ({
-    id: record.id,
-    kullanici_isim: `${record.kullanici.isim} ${record.kullanici.soyisim}`,
-    kullanici_eposta: record.kullanici.eposta,
-    cihazlar: record.cihazlar.map((cihaz: any) => cihaz.isim).join(', '),
-    created_at: new Date(record.created_at).toLocaleString(),
-    updated_at: new Date(record.updated_at).toLocaleString(),
-  }));
+  const rows = React.useMemo(() => {
+    if (!data?.cihazKullaniciByKullaniciId) return [];
+    const record = data.cihazKullaniciByKullaniciId;
+    return record.cihazlar.map((cihaz: any) => ({
+      id: cihaz.id,
+      kullanici_isim: `${record.kullanici.isim} ${record.kullanici.soyisim}`,
+      kullanici_eposta: record.kullanici.eposta,
+      cihazlar: cihaz.isim,
+      created_at: new Date(record.created_at).toLocaleString(),
+      updated_at: new Date(record.updated_at).toLocaleString(),
+    }));
+  }, [data]);
 
   if (error) {
     return <div><p>Veriler yüklenirken bir hata oluştu: {error.message}</p></div>;

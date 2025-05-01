@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import UyarilarByKullaniciListe from './uyaribyKullaniciListe/page';
 import UyariBilgi from './uyari_bilgi/page';
 import UyariOlustur from './uyariOlustur/page';
+import UyariByTespitId from './uyaribyTespitİd/page';
 
 
 
@@ -65,7 +66,7 @@ export default function UyariIslemleriTabs() {
         <UyariBilgi/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <UyarilarByKullaniciListe/>
+        <UyariByTespitId/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
         <UyariOlustur/>

@@ -80,7 +80,7 @@ const AdminPanel = () => {
         return <div><CihazKullaniciIslemleriTabs /></div>;
       case "Gözlem İşlem":
         return <div><GozlemIslemleriTabs /></div>;
-      case "Tespit Sigara İşlem":
+      case "Tespit İşlem":
         return <div><TespitIslemleriTabs /></div>;
         case "Uyari İşlem":
         return <div><UyariIslemleriTabs /></div>;

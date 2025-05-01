@@ -37,6 +37,7 @@ export default function CihazEdit() {
         variables: {
           id: parseInt(cihazId),
           input: {
+            id: parseInt(cihazId), // Include the id field here
             cihaz_seri_no: cihazData.cihaz_seri_no,
             isim: cihazData.isim,
             durum: cihazData.durum,
