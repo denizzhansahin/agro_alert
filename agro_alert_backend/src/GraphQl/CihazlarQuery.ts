@@ -21,7 +21,7 @@ export class CihazlarGraphQl {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN,Role.CIFTCI)
   @Mutation(() => Cihazlar)
   async updateCihaz(
     @Args('id', { type: () => Int }) id: number,
@@ -31,7 +31,7 @@ export class CihazlarGraphQl {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN,Role.CIFTCI)
   @Query(() => Cihazlar)
   async getCihazById(@Args('id', { type: () => Int }) id: number): Promise<Cihazlar> {
     return this.cihazlarService.getCihazById(id);

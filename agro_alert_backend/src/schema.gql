@@ -66,8 +66,8 @@ type CihazKullanici {
   updated_at: DateTime!
   delete_at: DateTime
   kullanici: Kullanici!
-  cihazlar: [Cihazlar!]!
-  gozlemler: [Gozlemler!]!
+  cihazlar: [Cihazlar!]
+  gozlemler: [Gozlemler!]
 }
 
 type Kullanici {
@@ -91,11 +91,11 @@ type Kullanici {
 
 type Query {
   kullanicilar: [Kullanici!]!
-  kullaniciBul(id: Float!): Kullanici!
+  kullaniciBul(id: Int!): Kullanici
   getCihazById(id: Int!): Cihazlar!
   getAllCihazlar: [Cihazlar!]!
   allCihazKullanicilar: [CihazKullanici!]!
-  cihazKullaniciById(id: Int!): CihazKullanici!
+  cihazKullaniciById(id: Int!): CihazKullanici
   cihazKullaniciByKullaniciId(kullaniciId: Int!): CihazKullanici
   allGozlemler: [Gozlemler!]!
   gozlemById(id: Int!): Gozlemler
@@ -109,7 +109,7 @@ type Query {
 
 type Mutation {
   kullaniciOlustur(kullaniciData: KullaniciCreateDTO!): Kullanici!
-  kullaniciGuncelle(kullaniciId: Float!, kullaniciGuncelleData: KullaniciUpdateDTO!): Kullanici!
+  kullaniciGuncelle(kullaniciId: Int!, kullaniciGuncelleData: KullaniciUpdateDTO!): Kullanici!
   createCihaz(createCihazDto: CreateCihazDto!): Cihazlar!
   updateCihaz(id: Int!, updateCihazDto: UpdateCihazDto!): Cihazlar!
   createCihazKullaniciForUser(kullaniciId: Int!): CihazKullanici!

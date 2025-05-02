@@ -49,7 +49,7 @@ mutation CreateUser($input: KullaniciCreateDTO!) {
 `;
 
 export const UPDATE_KULLANICI = gql`
-mutation UpdateUser($userId: Float!, $updateUserData: KullaniciUpdateDTO!) {
+mutation UpdateUser($userId: Int!, $updateUserData: KullaniciUpdateDTO!) {
   kullaniciGuncelle(kullaniciId: $userId, kullaniciGuncelleData: $updateUserData) {
     id
     nickname
@@ -69,7 +69,7 @@ mutation UpdateUser($userId: Float!, $updateUserData: KullaniciUpdateDTO!) {
 `;
 
 export const GET_KULLANICI_BY_ID = gql`
-query getUserById($id: Float!) {
+query getUserById($id: Int!) {
   kullaniciBul(id: $id) {
     id
     nickname

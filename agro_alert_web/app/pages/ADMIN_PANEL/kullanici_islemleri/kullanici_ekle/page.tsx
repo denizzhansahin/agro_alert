@@ -154,7 +154,7 @@ export default function KullaniciEkle() {
           onChange={(e) => setRole(e.target.value)}
         >
           <MenuItem value="ADMIN">ADMIN</MenuItem>
-          <MenuItem value="CIFTCI">CIFTCI</MenuItem>
+          <MenuItem value="ÇİFTÇİ">ÇİFTÇİ</MenuItem>
 
         </Select>
       </FormControl>

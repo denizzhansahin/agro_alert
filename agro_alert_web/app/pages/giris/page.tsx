@@ -49,7 +49,7 @@ function LoginPage() {
         if (data.reqUser.role === 'ADMIN') {
           router.push('/pages/ADMIN_PANEL/');
         } else if (data.reqUser.role === 'ÇİFTÇİ') {
-          router.push('/pages/CIFTCI_PANEL/');
+          router.push('/pages/CIFTCI_PANEL/src/');
         }
       }
     } catch (err) {

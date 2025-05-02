@@ -1,5 +1,5 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { UseGuards, NotFoundException } from '@nestjs/common'; // NotFoundException eklendi
+import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
+import { UseGuards, NotFoundException, ForbiddenException } from '@nestjs/common'; // NotFoundException eklendi
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';     // Yolu kontrol edin
 import { RolesGuard } from '../auth/guards/roles.guard';       // Yolu kontrol edin
 import { Roles } from '../auth/decorators/roles.decorator';     // Yolu kontrol edin
@@ -20,7 +20,7 @@ export class GozlemlerResolver {
      * Sadece Admin erişebilir.
      * GozlemlerService'te findAll() metodu gerektirir.
      */
-    @Roles(Role.ADMIN)
+    @Roles(Role.ADMIN,Role.CIFTCI)
     @Query(() => [Gozlemler], { name: 'allGozlemler' })
     async findAllGozlemler(): Promise<Gozlemler[]> {
         // return this.gozlemlerService.findAllByCihazKullanici(); // HATALI: Argüman eksik
@@ -33,13 +33,24 @@ export class GozlemlerResolver {
      * Bulunamazsa null döner.
      * Sadece Admin erişebilir (veya yetkilendirme ile kullanıcı kendi gözlemini görebilir).
      */
-    @Roles(Role.ADMIN) // VEYA @Roles(Role.ADMIN, Role.USER) ve ek yetkilendirme
+    @Roles(Role.ADMIN,Role.CIFTCI) // VEYA @Roles(Role.ADMIN, Role.USER) ve ek yetkilendirme
     @Query(() => Gozlemler, { name: 'gozlemById', nullable: true }) // nullable: true eklendi
     async findGozlemById(
-        @Args('id', { type: () => Int }) id: number
+        @Args('id', { type: () => Int }) id: number,
+        @Context() ctx: any,
     ): Promise<Gozlemler | null> { // Dönüş tipi | null olarak güncellendi
         try {
-            return await this.gozlemlerService.findOneById(id);
+            const gozlem = await this.gozlemlerService.findOneById(id);
+            const currentUser = ctx.req;
+
+            if (currentUser.user.role === Role.CIFTCI) {
+                const gozlemOwnerId = gozlem.cihaz_kullanici?.kullanici?.id;
+                if (!gozlemOwnerId || gozlemOwnerId !== currentUser.id) {
+                    throw new ForbiddenException("Bu gözlemi görme yetkiniz yok.");
+                }
+            }
+
+            return gozlem;
         } catch (error) {
             // Servisten NotFoundException gelirse null döndür
             if (error instanceof NotFoundException) {
@@ -54,16 +65,22 @@ export class GozlemlerResolver {
      * Belirtilen CihazKullanici ID'sine ait tüm gözlemleri getirir.
      * Sadece Admin erişebilir (veya yetkilendirme ile kullanıcı kendi gözlemlerini görebilir).
      */
-    @Roles(Role.ADMIN) // VEYA @Roles(Role.ADMIN, Role.USER) ve ek yetkilendirme
+    @Roles(Role.ADMIN,Role.CIFTCI) // VEYA @Roles(Role.ADMIN, Role.USER) ve ek yetkilendirme
     @Query(() => [Gozlemler], { name: 'gozlemlerByCihazKullaniciId' })
     async findGozlemlerByCihazKullaniciId(
         @Args('cihazKullaniciId', { type: () => Int }) cihazKullaniciId: number,
+        @Context() ctx: any,
     ): Promise<Gozlemler[]> {
-        // Yetkilendirme örneği:
-        // const currentUser = ctx.req.user; // Context'ten kullanıcı al (ayarlanmalı)
-        // if(currentUser.role !== Role.ADMIN && !await this.checkUserOwnsCihazKullanici(currentUser.id, cihazKullaniciId)) {
-        //     throw new ForbiddenException('Yetkiniz yok');
-        // }
+        const currentUser = ctx.req;
+
+        if (currentUser.user.role === Role.CIFTCI) {
+            const cihazKullanici = await this.gozlemlerService.findAllByCihazKullanici(cihazKullaniciId);
+            const cihazKullaniciOwnerId = cihazKullanici[0]?.cihaz_kullanici?.kullanici?.id; // İlk gözlemi alıyoruz, çünkü hepsi aynı kullanıcıya ait olmalı
+            if (!cihazKullaniciOwnerId || cihazKullaniciOwnerId !== currentUser.id) {
+                throw new ForbiddenException("Bu cihaz kullanıcısına ait gözlemleri görme yetkiniz yok.");
+            }
+        }
+
         return this.gozlemlerService.findAllByCihazKullanici(cihazKullaniciId);
     }
 
@@ -73,7 +90,7 @@ export class GozlemlerResolver {
      * Yeni bir gözlem oluşturur.
      * Sadece Admin erişebilir (veya yetkilendirme ile kullanıcı kendi cihazı için oluşturabilir).
      */
-    @Roles(Role.ADMIN) // VEYA @Roles(Role.ADMIN, Role.USER) ve ek yetkilendirme
+    @Roles(Role.ADMIN,Role.CIFTCI) // VEYA @Roles(Role.ADMIN, Role.USER) ve ek yetkilendirme
     @Mutation(() => Gozlemler, { name: 'createGozlem' })
     async createGozlem(
         @Args('createGozlemData', { type: () => CreateGozlemlerDto }) createGozlemData: CreateGozlemlerDto,

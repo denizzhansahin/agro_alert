@@ -56,7 +56,7 @@ export default function KullaniciEdit() {
             tel_no: userData.tel_no,
             profil_foto_base64: userData.profil_foto_base64,
             eposta: userData.eposta,
-            sifre: userData.sifre,
+            //sifre: userData.sifre,
             role: userData.role,
           },
         },
@@ -190,8 +190,7 @@ export default function KullaniciEdit() {
             onChange={(e) => setUserData({ ...userData, role: e.target.value })}
           >
             <MenuItem value="ADMIN">ADMIN</MenuItem>
-            <MenuItem value="HASTA">HASTA</MenuItem>
-            <MenuItem value="HEKİM">HEKİM</MenuItem>
+            <MenuItem value="ÇİFTÇİ">ÇİFTÇİ</MenuItem>
           </Select>
         </FormControl>
 

@@ -31,11 +31,11 @@ export class CihazKullanici {
     kullanici: Kullanici;
 
     @OneToMany(() => Cihazlar, (cihazlar) => cihazlar.cihaz_kullanici, { onDelete: 'SET NULL', cascade: true })
-    @Field(() => [Cihazlar])
+    @Field(() => [Cihazlar],{ nullable: true })
     cihazlar : Cihazlar[] |null
 
     @OneToMany(() => Gozlemler, (gozlemler) => gozlemler.cihaz_kullanici, { onDelete: 'SET NULL', cascade: true }) // onDelete davranışını gözden geçirin
-    @Field(() => [Gozlemler])
+    @Field(() => [Gozlemler],{ nullable: true })
     gozlemler: Gozlemler[] |null
 
 }

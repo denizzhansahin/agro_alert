@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
 import { UseGuards, NotFoundException } from '@nestjs/common'; // NotFoundException eklendi
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';     // Yolu doğrulayın
 import { Tespitler } from 'src/Entities/tespitler';
@@ -23,11 +23,13 @@ export class TespitlerResolver {
      */
     // @Roles(Role.ADMIN, Role.USER) // Gerekirse rol bazlı erişim ekleyin
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(Role.ADMIN)
+    @Roles(Role.ADMIN,Role.CIFTCI)
     @Query(() => [Tespitler], { name: 'tespitlerByGozlemId' })
     async findTespitlerByGozlemId(
         @Args('gozlemId', { type: () => Int }) gozlemId: number,
+        @Context() ctx: any,
     ): Promise<Tespitler[]> {
+        const currentUser = ctx.req.user;
         return this.tespitlerService.findAllByGozlem(gozlemId);
     }
 
@@ -37,7 +39,7 @@ export class TespitlerResolver {
      */
     // @Roles(Role.ADMIN, Role.USER) // Gerekirse rol bazlı erişim ekleyin
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(Role.ADMIN)
+    @Roles(Role.ADMIN,Role.CIFTCI)
     @Query(() => Tespitler, { name: 'tespitById', nullable: true })
     async findTespitById(
         @Args('id', { type: () => Int }) id: number,
@@ -62,7 +64,7 @@ export class TespitlerResolver {
      */
     // @Roles(Role.ADMIN, Role.USER) // Gerekirse rol bazlı erişim ekleyin
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(Role.ADMIN)
+    @Roles(Role.ADMIN,Role.CIFTCI)
     @Mutation(() => Tespitler, { name: 'createTespit' })
     async createTespit(
         @Args('createTespitData', { type: () => CreateTespitlerDto }) createTespitData: CreateTespitlerDto,
