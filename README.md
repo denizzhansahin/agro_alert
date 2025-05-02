@@ -45,6 +45,7 @@ AgroAlert, bu zorlukların üstesinden gelmek için entegre bir teknolojik çöz
 *   **Donanım:** Raspberry Pi 5, Kameralar, Toprak Nem Sensörleri, GPS Modülü, SIM808GSM Modülü.
 *   **Backend:** NestJS, GraphQL, TypeORM, Node.js.
 *   **Frontend (Mobil):** React Native, Expo, React Native Paper.
+*   **(Potansiyel Web):** Next.js
 *   **Veritabanı:** SQLite3 (Entegrasyon), İlişkisel Veritabanları (Bulut üzerinde).
 *   **AI/ML:** Python, YOLOv11, DeepSeek R1 14B (LLM), TensorFlow/PyTorch.
 *   **Bulut & DevOps:** Google Cloud Platform, Docker (Potansiyel), Git, GitHub.
@@ -53,15 +54,80 @@ AgroAlert, bu zorlukların üstesinden gelmek için entegre bir teknolojik çöz
 
 ## 🚀 Kurulum ve Kullanım
 
-(Bu bölüm projenin mevcut durumuna göre detaylandırılmalıdır. Örnek: "Detaylı kurulum adımları ve kullanım kılavuzu yakında eklenecektir." veya temel adımlar listelenebilir.)
+Bu bölüm, projenin yerel geliştirme ortamında nasıl kurulacağına dair temel bilgileri içerir.
 
-## 🤝 Katkıda Bulunma
+**Gereksinimler:**
 
-Bu proje açık kaynaklıdır ve geliştirilmesine katkıda bulunmak isteyen herkesi bekliyoruz. Lütfen 'Issues' bölümünü kullanarak hata bildirin veya 'Pull Requests' ile kod katkısı yapın.
+*   [Node.js](https://nodejs.org/) (LTS sürümü önerilir)
+*   [npm](https://www.npmjs.com/) veya [yarn](https://yarnpkg.com/) paket yöneticisi
+*   [Git](https://git-scm.com/)
 
-## 📄 Lisans
+**Adımlar:**
 
-Bu proje [Lisans Adı Seçin - Örn: MIT Lisansı] altında lisanslanmıştır. Detaylar için `LICENSE` dosyasına bakınız. (Henüz eklenmediyse eklenmesi önerilir.)
+1.  **Projeyi Klonlayın:**
+    ```bash
+    git clone https://github.com/denizzhansahin/agro_alert.git
+    cd agro_alert
+    ```
+
+2.  **Backend Kurulumu (NestJS):**
+    *   Backend kodlarının bulunduğu dizine gidin (örneğin `cd backend` veya projenin kök dizini olabilir).
+    *   Gerekli bağımlılıkları yükleyin:
+        ```bash
+        npm install
+        # veya
+        yarn install
+        ```
+    *   Eğer varsa, ortam değişkenleri için `.env.example` dosyasını `.env` olarak kopyalayın ve kendi yapılandırmanızı (veritabanı bağlantısı, API anahtarları vb.) girin.
+        ```bash
+        # Örnek: cp .env.example .env
+        # Sonrasında .env dosyasını düzenleyin
+        ```
+    *   Geliştirme sunucusunu başlatın:
+        ```bash
+        npm run start:dev
+        # veya
+        yarn start:dev
+        ```
+    *   Varsayılan olarak backend `http://localhost:3000` (veya NestJS projesinde belirtilen port) adresinde çalışmaya başlayacaktır.
+
+3.  **Frontend Kurulumu (Next.js - Eğer varsa):**
+    *   Frontend kodlarının bulunduğu dizine gidin (örneğin `cd frontend`).
+    *   Gerekli bağımlılıkları yükleyin:
+        ```bash
+        npm install
+        # veya
+        yarn install
+        ```
+    *   Eğer varsa, ortam değişkenleri için `.env.local.example` dosyasını `.env.local` olarak kopyalayın ve kendi yapılandırmanızı (backend API adresi vb.) girin.
+        ```bash
+        # Örnek: cp .env.local.example .env.local
+        # Sonrasında .env.local dosyasını düzenleyin
+        ```
+    *   Geliştirme sunucusunu başlatın:
+        ```bash
+        npm run dev
+        # veya
+        yarn dev
+        ```
+    *   Varsayılan olarak frontend `http://localhost:3001` (veya Next.js projesinde belirtilen farklı bir port) adresinde çalışmaya başlayacaktır.
+
+4.  **Mobil Uygulama Kurulumu (React Native/Expo):**
+    *   Mobil uygulama kodlarının bulunduğu dizine gidin.
+    *   Kurulum ve çalıştırma adımları için o dizindeki `README.md` dosyasına (varsa) veya Expo/React Native dokümantasyonuna başvurun. Genellikle `npm install` veya `yarn install` sonrası `npx expo start` veya `yarn start` gibi komutlar kullanılır.
+
+*Not: Yukarıdaki dizin adları (`backend`, `frontend`) varsayımsaldır. Kendi proje yapınıza göre doğru dizinlere gitmelisiniz.*
+
+---
+
+## 🔬 İlgili TÜBİTAK 2209-A Projesi
+
+Bu çalışma, aynı zamanda **TÜBİTAK 2209-A Üniversite Öğrencileri Araştırma Projeleri Destekleme Programı** kapsamında desteklenen [Proje Numarası ve Adı Buraya Eklenebilir, Opsiyonel] no'lu proje ile de ilişkilidir. AgroAlert sisteminin geliştirilmesindeki temel araştırma ve geliştirme faaliyetlerinin bir kısmı bu destek programı çerçevesinde yürütülmüştür.
+
+**TÜBİTAK 2209-A Proje Ekibi:**
+
+*   **Akademik Danışman:** Dr. Öğr. Üyesi Tolga Hayıt
+*   **Proje Yürütücüsü (Öğrenci):** Denizhan Şahin
 
 ---
 
@@ -73,7 +139,7 @@ Bu proje, **Space Teknopoli AgroAlert** takımı tarafından **TEKNOFEST 2025 KK
 *   **Takım ID:** 577020
 *   **Başvuru ID:** 3050990
 
-**Takım Üyeleri:**
+**TEKNOFEST Takım Üyeleri:**
 
 *   **Mehmet AKINOL:** Takım Danışmanı
 *   **Denizhan ŞAHİN:** Takım Kaptanı
@@ -81,11 +147,21 @@ Bu proje, **Space Teknopoli AgroAlert** takımı tarafından **TEKNOFEST 2025 KK
 *   **Abdullah DEREBAŞI:** Üye
 *   **Ömer ŞARLAVUK:** Üye
 
-(Takım üyelerinin sorumlulukları ve okulları gibi detaylar istenirse buraya eklenebilir.)
+---
+
+## 🤝 Katkıda Bulunma
+
+Bu proje açık kaynaklıdır ve geliştirilmesine katkıda bulunmak isteyen herkesi bekliyoruz. Lütfen 'Issues' bölümünü kullanarak hata bildirin veya 'Pull Requests' ile kod katkısı yapın.
+
+## 📄 Lisans
+
+Bu proje [Lisans Adı Seçin - Örn: MIT Lisansı] altında lisanslanmıştır. Detaylar için `LICENSE` dosyasına bakınız. (Henüz eklenmediyse eklenmesi önerilir.)
 
 ## 🙏 Teşekkürler
 
-Projemize ilham veren ve gelişim sürecinde destek olan TEKNOFEST ve Türkiye Teknoloji Takımı Vakfı'na (T3 Vakfı) teşekkür ederiz.
+Projemizin geliştirilme sürecindeki değerli katkıları, rehberliği ve destekleri için **Dr. Öğr. Üyesi Tolga Hayıt**'a içtenlikle teşekkür ederiz.
+
+Ayrıca, projemize ilham veren ve gelişim sürecinde destek olan **TEKNOFEST**, **Türkiye Teknoloji Takımı Vakfı (T3 Vakfı)** ve **TÜBİTAK**'a teşekkürlerimizi sunarız.
 
 ---
 
