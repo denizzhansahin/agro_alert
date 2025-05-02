@@ -122,7 +122,7 @@ Bu bölüm, projenin yerel geliştirme ortamında nasıl kurulacağına dair tem
 
 ## 🔬 İlgili TÜBİTAK 2209-A Projesi
 
-Bu çalışma, aynı zamanda **TÜBİTAK 2209-A Üniversite Öğrencileri Araştırma Projeleri Destekleme Programı** kapsamında desteklenen [Proje Numarası ve Adı Buraya Eklenebilir, Opsiyonel] no'lu proje ile de ilişkilidir. AgroAlert sisteminin geliştirilmesindeki temel araştırma ve geliştirme faaliyetlerinin bir kısmı bu destek programı çerçevesinde yürütülmüştür.
+Bu çalışma, aynı zamanda **TÜBİTAK 2209-A Üniversite Öğrencileri Araştırma Projeleri Destekleme Programı** kapsamında desteklenen [Raspberry Pi Entegre Yapay Zekaya Dayalı Zararlı (Haşere) Tespit ve Takip Sisteminin Geliştirilmesi - 1919B012321224] no'lu proje ile de ilişkilidir. AgroAlert sisteminin geliştirilmesindeki temel araştırma ve geliştirme faaliyetlerinin bir kısmı bu destek programı çerçevesinde yürütülmüştür.
 
 **TÜBİTAK 2209-A Proje Ekibi:**
 
