@@ -4,7 +4,11 @@ import { useQuery } from '@apollo/client';
 import { GET_GOZLEMLER_BY_CIHAZ_KULLANICI_ID } from '@/app/GraphQl/Gozlem.graphql';
 import { GET_CIHAZ_KULLANICI_BY_KULLANICI_ID } from '@/app/GraphQl/CihazKullanici.graphql';
 
-const Observations = () => {
+interface ObservationsProps {
+  onSelectObservation: (id: number) => void;
+}
+
+const Observations: React.FC<ObservationsProps> = ({ onSelectObservation }) => {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [filterType, setFilterType] = useState('all');
   const [cihazKullaniciId, setCihazKullaniciId] = useState<number | null>(null);
@@ -60,7 +64,7 @@ const Observations = () => {
     return obs.type === filterType;
   });
 
-  const observationTypes = useMemo(() => ['all', ...new Set(observations.map((obs) => obs.type))], [observations]);
+  const observationTypes = useMemo(() => ['all', ...Array.from(new Set<string>(observations.map((obs) => obs.type)))], [observations]);
 
   const sortedObservations = [...filteredObservations].sort((a, b) => {
     const dateA = new Date(a.timestamp);
@@ -151,7 +155,11 @@ const Observations = () => {
             </thead>
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {sortedObservations.map((observation) => (
-                <tr key={observation.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                <tr
+                  key={observation.id}
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
+                  onClick={() => onSelectObservation(observation.id)}
+                >
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900 dark:text-white">
                       {observation.deviceName}

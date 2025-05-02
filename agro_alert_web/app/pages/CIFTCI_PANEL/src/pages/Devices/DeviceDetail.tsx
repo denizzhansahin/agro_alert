@@ -16,9 +16,10 @@ import {
 interface DeviceDetailProps {
   deviceId: number;
   onBack: () => void;
+  onSelectObservation: (id: number) => void; // Add this prop
 }
 
-const DeviceDetail: React.FC<DeviceDetailProps> = ({ deviceId, onBack }) => {
+const DeviceDetail: React.FC<DeviceDetailProps> = ({ deviceId, onBack, onSelectObservation }) => {
   const { data: deviceData, loading: deviceLoading, error: deviceError } = useQuery(GET_CIHAZ_BY_ID, {
     variables: { id: deviceId },
     fetchPolicy: 'cache-and-network',
@@ -155,7 +156,11 @@ const DeviceDetail: React.FC<DeviceDetailProps> = ({ deviceId, onBack }) => {
             </thead>
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {observations.map((observation) => (
-                <tr key={observation.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                <tr
+                  key={observation.id}
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
+                  onClick={() => onSelectObservation(observation.id)}
+                >
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
                     {observation.gozlem_tipi}
                   </td>

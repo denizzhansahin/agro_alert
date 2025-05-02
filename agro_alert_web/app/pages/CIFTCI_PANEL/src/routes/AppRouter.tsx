@@ -4,6 +4,7 @@ import Dashboard from '../pages/Dashboard/Dashboard';
 import Devices from '../pages/Devices/Devices';
 import DeviceDetail from '../pages/Devices/DeviceDetail';
 import Observations from '../pages/Observations/Observations';
+import ObservationDetail from '../pages/Observations/ObservationDetail';
 import Alerts from '../pages/Alerts/Alerts';
 import Profile from '../pages/Profile/Profile';
 import NotFound from '../pages/NotFound';
@@ -13,6 +14,7 @@ export function AppRouterProvider() {
   // Simple router implementation since we don't have react-router
   const [currentPage, setCurrentPage] = React.useState<string>('dashboard');
   const [selectedDeviceId, setSelectedDeviceId] = React.useState<number | null>(null);
+  const [selectedObservationId, setSelectedObservationId] = React.useState<number | null>(null);
 
   const [userId, setUserId] = useState(null);
   
@@ -33,9 +35,32 @@ export function AppRouterProvider() {
           setCurrentPage('device-detail');
         }} />;
       case 'device-detail':
-        return <DeviceDetail deviceId={selectedDeviceId!} onBack={() => setCurrentPage('devices')} />;
+        return (
+          <DeviceDetail
+            deviceId={selectedDeviceId!}
+            onBack={() => setCurrentPage('devices')}
+            onSelectObservation={(id) => {
+              setSelectedObservationId(id);
+              setCurrentPage('observation-detail');
+            }}
+          />
+        );
       case 'observations':
-        return <Observations />;
+        return (
+          <Observations
+            onSelectObservation={(id) => {
+              setSelectedObservationId(id);
+              setCurrentPage('observation-detail');
+            }}
+          />
+        );
+      case 'observation-detail':
+        return (
+          <ObservationDetail
+            observationId={selectedObservationId!}
+            onBack={() => setCurrentPage('observations')}
+          />
+        );
       case 'alerts':
         return <Alerts />;
       case 'profile':
