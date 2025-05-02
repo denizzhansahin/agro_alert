@@ -58,13 +58,9 @@ const StatCard: React.FC<StatCardProps> = ({
             ? 'text-green-600 dark:text-green-400' 
             : 'text-red-600 dark:text-red-400'
         }`}>
-          {trendUp ? (
-            <ArrowUp className="flex-shrink-0 self-center h-4 w-4" />
-          ) : (
-            <ArrowDown className="flex-shrink-0 self-center h-4 w-4" />
-          )}
+          
           <span className="ml-1">
-            {trend} (son 30 gün)
+             (son 30 gün)
           </span>
         </div>
       </div>

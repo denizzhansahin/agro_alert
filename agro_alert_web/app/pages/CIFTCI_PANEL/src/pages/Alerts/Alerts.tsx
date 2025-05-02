@@ -8,18 +8,25 @@ const Alerts = () => {
   const [filterSeverity, setFilterSeverity] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [kullaniciId, setKullaniciId] = useState<number | null>(null);
+  const [cihazKullaniciId, setCihazKullaniciId] = useState<number | null>(null);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
     if (storedUser?.id) {
-      setKullaniciId(storedUser.kullaniciId);
+      setKullaniciId(storedUser.id);
+      setCihazKullaniciId(storedUser.cihazKullaniciId || null);
     }
   }, []);
+
+
 
   const { data, loading, error } = useQuery(GET_UYARILAR_BY_KULLANICI_ID, {
     variables: { kullaniciId },
     skip: !kullaniciId,
+    fetchPolicy: 'cache-and-network',
   });
+  console.log('Kullanici ID:', kullaniciId);
+  console.log('Uyari Data:', data);
 
   const alerts = useMemo(() => {
     if (!data?.uyarilarByKullaniciId) return [];

@@ -323,7 +323,7 @@ const Profile = () => {
         
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div className="mb-4 md:mb-0">
-        <p className="text-gray-600 dark:text-gray-300">Son giriş: 10.07.2024 08:15</p>
+        <p className="text-gray-600 dark:text-gray-300">Son giriş:...........</p>
         <p className="text-gray-600 dark:text-gray-300">
           IP: {typeof window !== 'undefined' && window.location.hostname}
         </p>

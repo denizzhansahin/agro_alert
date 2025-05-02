@@ -20,7 +20,7 @@ const BarChart: React.FC = () => {
     const chartHeight = height - (padding * 2);
     
     // Sample data
-    const data = [12, 19, 8, 15, 22, 14, 7];
+    const data = [122, 19, 8, 15, 22, 14, 7];
     const labels = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
     const maxValue = Math.max(...data);
     

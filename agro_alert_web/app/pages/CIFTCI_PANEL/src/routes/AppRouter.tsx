@@ -7,6 +7,7 @@ import Observations from '../pages/Observations/Observations';
 import Alerts from '../pages/Alerts/Alerts';
 import Profile from '../pages/Profile/Profile';
 import NotFound from '../pages/NotFound';
+import Tespit from '../pages/Tespit/Tespit';
 
 export function AppRouterProvider() {
   // Simple router implementation since we don't have react-router
@@ -39,6 +40,8 @@ export function AppRouterProvider() {
         return <Alerts />;
       case 'profile':
         return <Profile />;
+      case 'tespit':
+        return <Tespit />;
       default:
         return <NotFound />;
     }

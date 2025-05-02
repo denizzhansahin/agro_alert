@@ -43,6 +43,10 @@ const Devices: React.FC<DevicesProps> = ({ onSelectDevice }) => {
       cihazlar: cihaz.isim,
       created_at: new Date(record.created_at).toLocaleString(),
       updated_at: new Date(record.updated_at).toLocaleString(),
+      name: cihaz.isim,
+      status: cihaz.durum.toLowerCase(),
+      lastSeen: cihaz.son_gorulme ? new Date(cihaz.son_gorulme).toLocaleString() : 'Bilinmiyor',
+      serialNo: cihaz.cihaz_seri_no,
     }));
   }, [data]);
 
