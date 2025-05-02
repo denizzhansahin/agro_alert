@@ -8,7 +8,6 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick, navigateTo }) => {
 
-  const [notificationCount, setNotificationCount] = React.useState(3);
   
   return (
     <header className="z-10 py-4 bg-white dark:bg-gray-800 shadow-sm transition-colors duration-200">
@@ -33,11 +32,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, navigateTo }) => {
             onClick={() => navigateTo('alerts')}
           >
             <Bell className="w-5 h-5" />
-            {notificationCount > 0 && (
-              <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                {notificationCount}
-              </span>
-            )}
+         
           </button>
           
           <button 

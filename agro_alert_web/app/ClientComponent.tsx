@@ -53,7 +53,7 @@ function ReduxInitializer({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Sayfa yüklendiğinde localStorage'dan kullanıcı bilgilerini al ve Redux'a yükle
-    const storedUser = sessionStorage.getItem('user');
+    const storedUser = localStorage.getItem('user');
     if (storedUser) {
       dispatch(setKullanici(JSON.parse(storedUser)));
     }

@@ -7,11 +7,13 @@ import { Role } from '../auth/enums/role.enum';           // Yolu kontrol edin
 import { GozlemlerService } from 'src/gozlemler/gozlemler.service';
 import { Gozlemler } from 'src/Entities/gozlemler';
 import { CreateGozlemlerDto } from 'src/DTO/create-gozlemler.dto';
+import { CihazKullaniciService } from 'src/cihaz_kullanici/cihaz_kullanici.service';
+import { CihazlarService } from 'src/cihazlar/cihazlar.service';
 
 @Resolver(() => Gozlemler)
 @UseGuards(JwtAuthGuard, RolesGuard) // Tüm resolver için guardları uygula
 export class GozlemlerResolver {
-    constructor(private readonly gozlemlerService: GozlemlerService) {}
+    constructor(private readonly gozlemlerService: GozlemlerService, private readonly cihazlarKullaniciService:CihazKullaniciService, private readonly cihazlarService:CihazlarService) {}
 
     // --- Queries ---
 
@@ -20,7 +22,7 @@ export class GozlemlerResolver {
      * Sadece Admin erişebilir.
      * GozlemlerService'te findAll() metodu gerektirir.
      */
-    @Roles(Role.ADMIN,Role.CIFTCI)
+    @Roles(Role.ADMIN)
     @Query(() => [Gozlemler], { name: 'allGozlemler' })
     async findAllGozlemler(): Promise<Gozlemler[]> {
         // return this.gozlemlerService.findAllByCihazKullanici(); // HATALI: Argüman eksik
@@ -40,12 +42,14 @@ export class GozlemlerResolver {
         @Context() ctx: any,
     ): Promise<Gozlemler | null> { // Dönüş tipi | null olarak güncellendi
         try {
-            const gozlem = await this.gozlemlerService.findOneById(id);
             const currentUser = ctx.req;
+            const gozlem = await this.gozlemlerService.findOneById(id);
+
+            
 
             if (currentUser.user.role === Role.CIFTCI) {
                 const gozlemOwnerId = gozlem.cihaz_kullanici?.kullanici?.id;
-                if (!gozlemOwnerId || gozlemOwnerId !== currentUser.id) {
+                if (!gozlemOwnerId || gozlemOwnerId !==  ctx.req.user.id) {
                     throw new ForbiddenException("Bu gözlemi görme yetkiniz yok.");
                 }
             }
@@ -69,17 +73,13 @@ export class GozlemlerResolver {
     @Query(() => [Gozlemler], { name: 'gozlemlerByCihazKullaniciId' })
     async findGozlemlerByCihazKullaniciId(
         @Args('cihazKullaniciId', { type: () => Int }) cihazKullaniciId: number,
-        @Context() ctx: any,
+    
     ): Promise<Gozlemler[]> {
-        const currentUser = ctx.req;
 
-        if (currentUser.user.role === Role.CIFTCI) {
-            const cihazKullanici = await this.gozlemlerService.findAllByCihazKullanici(cihazKullaniciId);
-            const cihazKullaniciOwnerId = cihazKullanici[0]?.cihaz_kullanici?.kullanici?.id; // İlk gözlemi alıyoruz, çünkü hepsi aynı kullanıcıya ait olmalı
-            if (!cihazKullaniciOwnerId || cihazKullaniciOwnerId !== currentUser.id) {
-                throw new ForbiddenException("Bu cihaz kullanıcısına ait gözlemleri görme yetkiniz yok.");
-            }
-        }
+    
+
+
+
 
         return this.gozlemlerService.findAllByCihazKullanici(cihazKullaniciId);
     }
@@ -93,7 +93,7 @@ export class GozlemlerResolver {
     @Roles(Role.ADMIN,Role.CIFTCI) // VEYA @Roles(Role.ADMIN, Role.USER) ve ek yetkilendirme
     @Mutation(() => Gozlemler, { name: 'createGozlem' })
     async createGozlem(
-        @Args('createGozlemData', { type: () => CreateGozlemlerDto }) createGozlemData: CreateGozlemlerDto,
+        @Args('createGozlemData', { type: () => CreateGozlemlerDto }) createGozlemData: CreateGozlemlerDto, @Context() ctx: any,
     ): Promise<Gozlemler> {
         // Yetkilendirme örneği:
         // const currentUser = ctx.req.user;

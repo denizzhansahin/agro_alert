@@ -10,7 +10,7 @@ const Alerts = () => {
   const [kullaniciId, setKullaniciId] = useState<number | null>(null);
 
   useEffect(() => {
-    const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
     if (storedUser?.id) {
       setKullaniciId(storedUser.kullaniciId);
     }

@@ -73,7 +73,7 @@ query getGozlemlerByCihazKullaniciId($cihazKullaniciId: Int!) {
   }
 }
 `;
-
+/*
 export const GET_GOZLEMLER_BY_KULLANICI_ID = gql`
 query getGozlemlerByKullaniciId($kullaniciId: Int!) {
   gozlemlerByKullaniciId(kullaniciId: $kullaniciId) {
@@ -99,6 +99,7 @@ query getGozlemlerByKullaniciId($kullaniciId: Int!) {
   }
 }
 `;
+*/
 
 export const CREATE_GOZLEM = gql`
 mutation createGozlem($createGozlemData: CreateGozlemlerDto!) {

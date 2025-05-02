@@ -4,18 +4,24 @@ import { useQuery, useMutation } from '@apollo/client';
 import { GET_KULLANICI_BY_ID, UPDATE_KULLANICI } from '@/app/GraphQl/Kullanici.graphql';
 import Link from 'next/link';
 
+
 const Profile = () => {
+
+
+
   const [userId, setUserId] = useState(null);
 
-    useEffect(() => {
-      const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+  useEffect(() => {
+      const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
       if (storedUser?.id) {
         setUserId(storedUser.id);
       }
     }, []);
 
+
   const { data, loading, error, refetch } = useQuery(GET_KULLANICI_BY_ID, {
     variables: { id: userId },
+    fetchPolicy: 'cache-and-network',
   });
   const [updateKullanici] = useMutation(UPDATE_KULLANICI);
 

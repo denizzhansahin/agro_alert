@@ -2,31 +2,50 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Calendar, Filter, ArrowDown, ArrowUp, Download, Eye } from 'lucide-react';
 import { useQuery } from '@apollo/client';
 import { GET_GOZLEMLER_BY_CIHAZ_KULLANICI_ID } from '@/app/GraphQl/Gozlem.graphql';
+import { GET_CIHAZ_KULLANICI_BY_KULLANICI_ID } from '@/app/GraphQl/CihazKullanici.graphql';
 
 const Observations = () => {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [filterType, setFilterType] = useState('all');
   const [cihazKullaniciId, setCihazKullaniciId] = useState<number | null>(null);
 
-  useEffect(() => {
-    const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
-    if (storedUser?.cihazKullaniciId) {
-      setCihazKullaniciId(storedUser.cihazKullaniciId);
-    }
-    console.log('Cihaz Kullanıcı ID:', storedUser);
-  }, []);
-
-  const { data, loading, error } = useQuery(GET_GOZLEMLER_BY_CIHAZ_KULLANICI_ID, {
-    variables: { cihazKullaniciId },
-    skip: !cihazKullaniciId,
-  });
+   const [kullaniciId, setKullaniciId] = useState<number | null>(null);
+   
+     useEffect(() => {
+       const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+       if (storedUser?.id) {
+         setKullaniciId(storedUser.id);
+         setCihazKullaniciId(storedUser.cihazKullaniciId || null);
+       }
+     }, []);
+   
+     const { data: cihazData} = useQuery(GET_CIHAZ_KULLANICI_BY_KULLANICI_ID, {
+       variables: { kullaniciId },
+       skip: !kullaniciId,
+       fetchPolicy: 'cache-and-network',
+       onCompleted: (data) => {
+         if (data?.cihazKullaniciByKullaniciId?.id) {
+           setCihazKullaniciId(data.cihazKullaniciByKullaniciId.id);
+         }
+       },
+     });
+   
+     console.log('Cihaz Data:', cihazData?.cihazKullaniciByKullaniciId.id);
+     console.log('Cihaz Kullanici ID:', cihazKullaniciId);
+   
+   
+     const { data: gozlemData, loading, error } = useQuery(GET_GOZLEMLER_BY_CIHAZ_KULLANICI_ID, {
+       variables: { cihazKullaniciId },
+       skip: !cihazKullaniciId,
+       fetchPolicy: 'cache-and-network',
+     });
 
   console.log('Cihaz Kullanıcı ID:', cihazKullaniciId);
-  console.log('Gozlemler:',data)
+  console.log('Gozlemler:',gozlemData)
 
   const observations = useMemo(() => {
-    if (!data?.gozlemlerByCihazKullaniciId) return [];
-    return data.gozlemlerByCihazKullaniciId.map((gozlem: any) => ({
+    if (!gozlemData?.gozlemlerByCihazKullaniciId) return [];
+    return gozlemData.gozlemlerByCihazKullaniciId.map((gozlem: any) => ({
       id: gozlem.id,
       deviceName: 'Cihaz', // Replace with actual device name if available
       type: gozlem.gozlem_tipi,
@@ -34,7 +53,7 @@ const Observations = () => {
       timestamp: new Date(gozlem.created_at).toLocaleString(),
       hasImage: !!gozlem.resim_base64,
     }));
-  }, [data]);
+  }, [gozlemData]);
 
   const filteredObservations = observations.filter((obs) => {
     if (filterType === 'all') return true;

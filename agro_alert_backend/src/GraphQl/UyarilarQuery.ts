@@ -49,7 +49,7 @@ export class UyarilarResolver {
     ): Promise<Uyarilar[]> {
         const currentUser = ctx.req.user;
 
-        if (currentUser.role === Role.CIFTCI && currentUser.sub !== kullaniciId) {
+        if (currentUser.role === Role.CIFTCI && currentUser.id !== kullaniciId) {
             throw new ForbiddenException("Başka bir kullanıcının uyarılarını sorgulayamazsınız.");
         }
 
@@ -70,7 +70,7 @@ export class UyarilarResolver {
 
             if (currentUser.role === Role.CIFTCI) {
                 const uyariSahibiId = uyari.tespit?.gozlem?.cihaz_kullanici?.kullanici?.id;
-                if (!uyariSahibiId || uyariSahibiId !== currentUser.sub) {
+                if (!uyariSahibiId || uyariSahibiId !== currentUser.id) {
                     throw new ForbiddenException("Bu tespite ait uyarıyı görme yetkiniz yok.");
                 }
             }
@@ -94,10 +94,10 @@ export class UyarilarResolver {
     ): Promise<Uyarilar> {
         const currentUser = ctx.req.user;
 
-        if (currentUser.role === Role.CIFTCI && createUyariData.kullaniciId !== currentUser.sub) {
+        if (currentUser.role === Role.CIFTCI && createUyariData.kullaniciId !== currentUser.id) {
             throw new ForbiddenException("Başka bir kullanıcı için uyarı oluşturamazsınız.");
         }
 
-        return this.uyarilarService.create(createUyariData, currentUser.sub);
+        return this.uyarilarService.create(createUyariData, currentUser.id);
     }
 }

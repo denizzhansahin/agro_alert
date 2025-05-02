@@ -252,32 +252,6 @@ query ($id: Int!) {
 }
 
 
-query {
-  allGozlemler {
-    id
-    gozlem_tipi
-    sayisal_deger
-    metin_deger
-    resim_base64
-    gps_enlem
-    gps_boylam
-    created_at
-    updated_at
-    cihaz_kullanici {
-      id
-      kullanici {
-        id
-        isim
-        soyisim
-      }
-    }
-    tespitler {
-      id
-      tespit_tipi
-      guven_skoru
-    }
-  }
-}
 
 
 query {

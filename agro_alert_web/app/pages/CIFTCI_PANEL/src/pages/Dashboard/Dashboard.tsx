@@ -16,7 +16,7 @@ const Dashboard = () => {
   const [cihazKullaniciId, setCihazKullaniciId] = useState<number | null>(null);
 
   useEffect(() => {
-    const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
     if (storedUser?.id) {
       setKullaniciId(storedUser.id);
       setCihazKullaniciId(storedUser.cihazKullaniciId || null);
@@ -26,18 +26,31 @@ const Dashboard = () => {
   const { data: cihazData, loading: cihazLoading } = useQuery(GET_CIHAZ_KULLANICI_BY_KULLANICI_ID, {
     variables: { kullaniciId },
     skip: !kullaniciId,
+    fetchPolicy: 'cache-and-network',
+    onCompleted: (data) => {
+      if (data?.cihazKullaniciByKullaniciId?.id) {
+        setCihazKullaniciId(data.cihazKullaniciByKullaniciId.id);
+      }
+    },
   });
 
-  console.log('Cihaz Data:', cihazData);
+
+
+
   const { data: gozlemData, loading: gozlemLoading } = useQuery(GET_GOZLEMLER_BY_CIHAZ_KULLANICI_ID, {
     variables: { cihazKullaniciId },
     skip: !cihazKullaniciId,
+    fetchPolicy: 'cache-and-network',
   });
 
   const { data: uyariData, loading: uyariLoading } = useQuery(GET_UYARILAR_BY_KULLANICI_ID, {
     variables: { kullaniciId },
     skip: !kullaniciId,
+    fetchPolicy: 'cache-and-network',
   });
+  console.log('Kullanici ID:', kullaniciId);
+  console.log('Uyari Data:', uyariData);
+ 
 
   const devices = useMemo(() => {
     if (!cihazData?.cihazKullaniciByKullaniciId?.cihazlar) return [];
@@ -104,14 +117,6 @@ const Dashboard = () => {
           trendUp={true}
           icon={<BarChart2 className="h-6 w-6 text-green-600" />}
           color="green"
-        />
-        <StatCard
-          title="İzlenen Alanlar"
-          value="2" // Replace with dynamic data if available
-          trend="0"
-          trendUp={true}
-          icon={<MapPin className="h-6 w-6 text-purple-600" />}
-          color="purple"
         />
       </div>
 

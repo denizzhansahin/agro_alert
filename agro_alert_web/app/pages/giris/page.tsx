@@ -42,7 +42,7 @@ function LoginPage() {
       
       // Kullanıcı bilgilerini Redux'a kaydet
       dispatch(setKullanici(data.reqUser.user));
-      sessionStorage.setItem('user', JSON.stringify(data.reqUser.user));
+      localStorage.setItem('user', JSON.stringify(data.reqUser.user));
 
       // Yönlendirme yap
       if (localStorage.getItem('token') === data.userData.token) {

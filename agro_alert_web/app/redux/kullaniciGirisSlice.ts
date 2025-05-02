@@ -1,22 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
+// Kullanici arayüzünüzü kullanıyoruz
 export interface Kullanici {
   id: number;
   isim: string;
   soyisim: string;
   eposta: string;
   role: string;
-  sehir: string;
-  ilce: string;
-  tam_adres: string;
-  tel_no: string;
-  profil_foto_base64: string;
-  boy: number;
-  kilo: number;
+  sehir: string | null; // Nullable olabilirler
+  ilce: string | null;
+  tam_adres: string | null;
+  tel_no: string | null;
+  profil_foto_base64: string | null;
+  boy: number | null;
+  kilo: number | null;
   nickname: string;
   created_at: string;
   updated_at: string;
+  cihazKullaniciId?: number | null; // Dashboard için gerekliydi, ekleyelim
 }
 
 export interface KullaniciGirisState {

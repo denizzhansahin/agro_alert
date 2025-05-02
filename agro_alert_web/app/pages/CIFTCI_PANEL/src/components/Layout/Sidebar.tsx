@@ -44,11 +44,7 @@ const Sidebar: React.FC<SidebarProps> = ({ navigateTo, currentPage }) => {
                   <span className="mr-3">{item.icon}</span>
                   <span className="font-medium">{item.name}</span>
                   
-                  {item.path === 'alerts' && (
-                    <span className="ml-auto flex items-center justify-center w-5 h-5 text-xs font-semibold text-white bg-red-600 rounded-full">
-                      3
-                    </span>
-                  )}
+
                 </button>
               </li>
             ))}

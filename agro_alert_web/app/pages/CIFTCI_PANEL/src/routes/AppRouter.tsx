@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout/Layout';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import Devices from '../pages/Devices/Devices';
@@ -12,6 +12,15 @@ export function AppRouterProvider() {
   // Simple router implementation since we don't have react-router
   const [currentPage, setCurrentPage] = React.useState<string>('dashboard');
   const [selectedDeviceId, setSelectedDeviceId] = React.useState<number | null>(null);
+
+  const [userId, setUserId] = useState(null);
+  
+      useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+        if (storedUser?.id) {
+          setUserId(storedUser.id);
+        }
+      }, []);
 
   const renderPage = () => {
     switch (currentPage) {

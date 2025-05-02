@@ -15,7 +15,7 @@ const Devices: React.FC<DevicesProps> = ({ onSelectDevice }) => {
   const [kullaniciId, setKullaniciId] = useState<number | null>(null);
 
   useEffect(() => {
-    const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
     if (storedUser?.id) {
       setKullaniciId(storedUser.id);
     }
@@ -26,6 +26,7 @@ const Devices: React.FC<DevicesProps> = ({ onSelectDevice }) => {
   const { data, loading, error } = useQuery(GET_CIHAZ_KULLANICI_BY_KULLANICI_ID, {
     variables: { kullaniciId: kullaniciId }, // Ensure it's an integer
     skip: !kullaniciId,
+    fetchPolicy: 'cache-and-network',
   });
 
   console.log('kullaniciId', kullaniciId);
@@ -35,7 +36,7 @@ const Devices: React.FC<DevicesProps> = ({ onSelectDevice }) => {
   const devices = React.useMemo(() => {
     if (!data?.cihazKullaniciByKullaniciId) return [];
     const record = data.cihazKullaniciByKullaniciId;
-    return record.cihazlar.map((cihaz: any) => ({
+    return (record?.cihazlar ?? []).map((cihaz: any) => ({
       id: cihaz.id,
       kullanici_isim: `${record.kullanici.isim} ${record.kullanici.soyisim}`,
       kullanici_eposta: record.kullanici.eposta,
