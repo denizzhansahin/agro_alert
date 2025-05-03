@@ -7,7 +7,7 @@
 
 /agro_alert_web/out/
 /agro_alert_web/build
-
+/agro_alert_raspberryPi5/yolo11n-seg.pt
 
 # Logs
 logs
