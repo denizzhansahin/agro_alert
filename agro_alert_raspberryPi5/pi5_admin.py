@@ -70,6 +70,21 @@ mutation createTespit($createTespitData: CreateTespitlerDto!) {
 
 """
 
+CREATE_UYARİ_MUTATION = """
+mutation createUyari($createUyariData: CreateUyarilarDto!) {
+  createUyari(createUyariData: $createUyariData) {
+    id
+    uyari_seviyesi
+    mesaj
+    durum
+    created_at
+    updated_at
+  }
+}
+"""
+
+kullaniciId_giris_sonrasi = None
+
 class ApiClient:
     """
     REST ile giriş yapıp, alınan token ile GraphQL istekleri atan istemci.
@@ -97,6 +112,10 @@ class ApiClient:
             response.raise_for_status() # 4xx veya 5xx hatalarında exception fırlatır
 
             login_data = response.json()
+
+            global kullaniciId_giris_sonrasi
+            kullaniciId_giris_sonrasi = login_data[self.token_key]["id"] # Kullanıcı ID'sini 
+            print("Kullanıcı1111111111 ID'si:", kullaniciId_giris_sonrasi)
 
             if self.token_key in login_data:
                 self.token = login_data[self.token_key]["token"]
@@ -195,7 +214,7 @@ class ApiClient:
 if __name__ == "__main__":
     # İstemciyi oluştur
     client = ApiClient(LOGIN_URL, GRAPHQL_URL, LOGIN_EMAIL, LOGIN_PASSWORD, token_key=TOKEN_KEY)
-
+    
     # GraphQL sorgusunu çalıştır (gerekirse otomatik giriş yapacak)
     #profile_data = client.execute_graphql(GET_PROFILE_QUERY)
     bocek_veriler = goruntu_tespit_bocek()
@@ -222,6 +241,8 @@ if __name__ == "__main__":
             variables=variables_for_mutation
         )
 
+        print("Kullanıcı ID'si:", kullaniciId_giris_sonrasi)
+
         if gozlem_olusturma_sonucu:
             print("Gözlem başarıyla oluşturuldu:")
             print("type: ", type(gozlem_olusturma_sonucu))
@@ -230,16 +251,38 @@ if __name__ == "__main__":
             print("keys createGozlem: ", gozlem_olusturma_sonucu["createGozlem"].keys())
             print("keys createGozlem ID: ", gozlem_olusturma_sonucu["createGozlem"]["id"])
             #print(json.dumps(gozlem_olusturma_sonucu, indent=2))
-            if bocek_veriler[0].get('sayisal_deger') > 1:
+            if bocek_veriler[0].get('sayisal_deger') >= 1:
                 variables_for_tespit = { 
                     "createTespitData": {
                         "gozlemId": gozlem_olusturma_sonucu["createGozlem"]['id'],  # Gözlem ID'sini kullan
-                        "tespit_tipi": "hastalik_tespiti",
-                        "guven_skoru": 0.95,  # Örnek güven skoru, gerçek değeri ile değiştirin
+                        "tespit_tipi": "böcek_tespiti",
+                        "guven_skoru": 0.095,  # Örnek güven skoru, gerçek değeri ile değiştirin
                         "sinirlayici_kutu_verisi": "swgwe"
                     }
                 }
                 tespit_sonucu = client.execute_graphql(CREATE_TESTPIT_MUTATION,variables=variables_for_tespit)
+                print("güven skoru: ", variables_for_tespit["createTespitData"]["guven_skoru"])
+               
+                if tespit_sonucu["createTespit"]["guven_skoru"] < 0.5:
+                    print("Tespit başarıyla oluşturuldu:")
+                    print("type: ", type(tespit_sonucu))
+                    print("keys: ", tespit_sonucu.keys())
+                    print("type createTespit: ", type(tespit_sonucu["createTespit"]))
+                    print("keys createTespit: ", tespit_sonucu["createTespit"].keys())
+                    print("keys createTespit ID: ", tespit_sonucu["createTespit"]["id"])
+
+                    variables_for_uyari = {
+                            "createUyariData" : {
+                                "kullaniciId" : kullaniciId_giris_sonrasi,
+                                "tespitId" : tespit_sonucu["createTespit"]["id"],
+                                "uyari_seviyesi" : "Yüksek",
+                                "mesaj" : "deneme",
+                                "durum" : "deneme",
+                            }
+                        }
+                    
+                    uyari_sonucu = client.execute_graphql(CREATE_UYARİ_MUTATION,variables=variables_for_uyari)
+                    
         else:
             print("Gözlem oluşturulamadı veya hata oluştu.")
         print("-" * 20) # Gözlemler arasına ayırıcı koy
@@ -282,16 +325,37 @@ if __name__ == "__main__":
             print("type createGozlem: ", type(gozlem_olusturma_sonucu["createGozlem"]))
             print("keys createGozlem: ", gozlem_olusturma_sonucu["createGozlem"].keys())
             #print(json.dumps(gozlem_olusturma_sonucu, indent=2))
-            if bocek_veriler[0].get('sayisal_deger') > 1:
+            if hastalik_veriler[0].get('sayisal_deger') > 1:
                 variables_for_tespit = { 
                     "createTespitData": {
                         "gozlemId": gozlem_olusturma_sonucu["createGozlem"]['id'],  # Gözlem ID'sini kullan
                         "tespit_tipi": "hastalik_tespiti",
-                        "guven_skoru": 0.95,  # Örnek güven skoru, gerçek değeri ile değiştirin
+                        "guven_skoru": 0.095,  # Örnek güven skoru, gerçek değeri ile değiştirin
                         "sinirlayici_kutu_verisi": "swgwe"
                     }
                 }
                 tespit_sonucu = client.execute_graphql(CREATE_TESTPIT_MUTATION,variables=variables_for_tespit)
+                print("güven skoru: ", variables_for_tespit["createTespitData"]["guven_skoru"])
+               
+                if tespit_sonucu["createTespit"]["guven_skoru"] < 0.5:
+                    print("Tespit başarıyla oluşturuldu:")
+                    print("type: ", type(tespit_sonucu))
+                    print("keys: ", tespit_sonucu.keys())
+                    print("type createTespit: ", type(tespit_sonucu["createTespit"]))
+                    print("keys createTespit: ", tespit_sonucu["createTespit"].keys())
+                    print("keys createTespit ID: ", tespit_sonucu["createTespit"]["id"])
+
+                    variables_for_uyari = {
+                            "createUyariData" : {
+                                "kullaniciId" : kullaniciId_giris_sonrasi,
+                                "tespitId" : tespit_sonucu["createTespit"]["id"],
+                                "uyari_seviyesi" : "Yüksek",
+                                "mesaj" : "deneme",
+                                "durum" : "deneme",
+                            }
+                        }
+                    
+                    uyari_sonucu = client.execute_graphql(CREATE_UYARİ_MUTATION,variables=variables_for_uyari)
 
             
         else:
