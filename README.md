@@ -6,6 +6,52 @@ AgroAlert, tarımsal verimliliği artırmak ve sürdürülebilir tarım uygulama
 
 ---
 
+
+
+---
+
+## 🧠 AgroAlert Bilgi Bankası & Detaylı Dokümantasyon (DeepWiki)
+
+Bu projenin temel README dosyası genel bir bakış sunarken, AgroAlert'ın tüm teknik detaylarına, mimari kararlarına, araştırma notlarına ve derinlemesine bileşen analizlerine erişmek için özel olarak oluşturulmuş **DeepWiki bilgi bankamızı** ziyaret edebilirsiniz.
+
+**➡️ [AgroAlert DeepWiki Sayfasına Git](https://deepwiki.com/denizzhansahin/agro_alert)**
+
+**DeepWiki Üzerinde Neler Bulabilirsiniz?**
+
+DeepWiki platformu, projenin daha yapılandırılmış ve kapsamlı bir şekilde belgelendirilmesini sağlar. Bu sitede özellikle aşağıdaki gibi konular hakkında ayrıntılı bilgilere ulaşabilirsiniz:
+
+*   **Derinlemesine Sistem Mimarisi:**
+    *   Bileşenler arası etkileşim diyagramları (Veri akışı, kontrol akışı).
+    *   Bulut (Google Cloud) ve yerel (Pardus) sunucu yapılandırma detayları.
+    *   Ağ protokolleri ve iletişim katmanı hakkında bilgiler.
+*   **Donanım Bileşenleri:**
+    *   Kullanılan sensörlerin (nem, GPS vb.) teknik özellikleri ve kalibrasyon notları.
+    *   Raspberry Pi 5 kurulumu ve özelleştirmeleri.
+    *   Kamera modülü seçimi ve konfigürasyonu.
+    *   GSM (SIM808GSM) modülü bağlantı ve AT komutları detayları.
+    *   3D baskı modellerin (koruyucu kılıf, robot şasisi vb.) tasarım süreçleri ve STL dosyalarına bağlantılar (varsa).
+*   **Yazılım Bileşenleri:**
+    *   **Backend (NestJS):** Modül yapısı, API endpoint'lerinin detaylı açıklamaları, GraphQL şeması, TypeORM entity ilişkileri, kimlik doğrulama (Authentication/Authorization) akışları.
+    *   **Mobil Uygulama (React Native/Expo):** Ekran tasarımları, bileşen hiyerarşisi, state yönetimi detayları, API entegrasyonu.
+    *   **Veritabanı:** Detaylı şema tasarımı, tablolar arası ilişkiler (ERD), veri modelleri.
+*   **Yapay Zeka Modelleri:**
+    *   **Görüntü İşleme (YOLOv11):** Kullanılan veri setleri, etiketleme süreci, model eğitimi (hyperparameter tuning), performans metrikleri (mAP, precision, recall), tespit ve segmentasyon sonuçlarının yorumlanması.
+    *   **Doğal Dil İşleme (DeepSeek LLM):** Chatbot için yapılan fine-tuning süreci, kullanılan veri seti, prompt engineering teknikleri, modelin yetenekleri ve sınırlılıkları.
+*   **Kurulum ve Dağıtım (Deployment):**
+    *   Geliştirme ortamının detaylı kurulum adımları (bağımlılıklar, ortam değişkenleri).
+    *   Sunucu (Backend/AI Modelleri) ve mobil uygulamanın farklı platformlara dağıtım (deployment) stratejileri ve adımları.
+*   **Araştırma ve Geliştirme Notları:**
+    *   Proje sürecinde karşılaşılan zorluklar ve bulunan çözümler.
+    *   Teknoloji seçimlerinin gerekçeleri.
+    *   Literatür taraması ve ilgili çalışmalar.
+    *   Gelecek geliştirme fikirleri ve potansiyel iyileştirmeler.
+
+Kısacası, projenin "nasıl çalıştığı", "neden bu şekilde tasarlandığı" ve "nasıl daha da geliştirilebileceği" gibi konularda derinlemesine bilgi edinmek istiyorsanız, DeepWiki sayfamız sizin için doğru adres!
+
+**➡️ [https://deepwiki.com/denizzhansahin/agro_alert](https://deepwiki.com/denizzhansahin/agro_alert)**
+
+---
+
 ## 📝 Sorun: Tarımda Erken Teşhisin Önemi
 
 Geleneksel tarım yöntemlerinde, özellikle geniş arazilerde, bitki hastalıklarının (örneğin, buğdaydaki Yaprak Pası), zararlı böceklerin (örneğin, Süne) veya aşırı sulama gibi olumsuz çevresel faktörlerin zamanında fark edilmesi oldukça zordur. Bu gecikmeler;
