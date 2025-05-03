@@ -161,6 +161,11 @@ if __name__ == "__main__":
     # GraphQL sorgusunu çalıştır (gerekirse otomatik giriş yapacak)
     profile_data = client.execute_graphql(GET_PROFILE_QUERY)
 
+    #burada raspberryPi'den gelen verileri alıp işleyebilirsiniz
+    #gozlem
+    #tespit
+    #varsa uyarı
+
     if profile_data:
         print("\nProfil Bilgisi:")
         print(json.dumps(profile_data, indent=2))
