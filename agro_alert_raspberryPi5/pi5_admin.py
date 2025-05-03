@@ -1,18 +1,21 @@
 import requests
 import json
 import time # Token süresinin dolmasını simüle etmek için (isteğe bağlı)
+from goruntu_tespit_hastalik import goruntu_tespit_hastalik
+from goruntu_tespit_bocek import goruntu_tespit_bocek
 
 # --- Yapılandırma ---
 LOGIN_URL = "http://192.168.0.166:5000/auth/login" # KENDİ REST GİRİŞ ENDPOINT'İNİZ
 GRAPHQL_URL = "http://192.168.0.166:5000/graphql"     # KENDİ GraphQL ENDPOINT'İNİZ
-LOGIN_EMAIL = "admin@admin.com"              # Test kullanıcınızın e-postası
-LOGIN_PASSWORD = "admin"               # Test kullanıcınızın şifresi
+LOGIN_EMAIL = "ciftci@admin.com"              # Test kullanıcınızın e-postası
+LOGIN_PASSWORD = "ciftci"               # Test kullanıcınızın şifresi
 
 # Token'ın JSON yanıtında hangi anahtar altında olduğunu belirtin
 TOKEN_KEY = "userData" # VEYA 'token', 'access_token' vb. olabilir, API'nize bakın
 
+"""
 # GraphQL Sorgusu (Örnek)
-GET_PROFILE_QUERY = """
+GET_PROFILE_QUERY = 
     query {
   kullanicilar {
     id
@@ -32,6 +35,39 @@ GET_PROFILE_QUERY = """
     cihaz_kullanici {id created_at}
   }
 }
+"""
+
+CREATE_GOZLEMLER_MUTATION = """
+
+mutation createGozlem($createGozlemData: CreateGozlemlerDto!) {
+  createGozlem(createGozlemData: $createGozlemData) {
+    id
+    gozlem_tipi
+    sayisal_deger
+    metin_deger
+    resim_base64
+    gps_enlem
+    gps_boylam
+    created_at
+    updated_at
+  }
+}
+
+"""
+
+
+CREATE_TESTPIT_MUTATION = """
+mutation createTespit($createTespitData: CreateTespitlerDto!) {
+  createTespit(createTespitData: $createTespitData) {
+    id
+    tespit_tipi
+    guven_skoru
+    sinirlayici_kutu_verisi
+    created_at
+    updated_at
+  }
+}
+
 """
 
 class ApiClient:
@@ -153,26 +189,137 @@ class ApiClient:
             print(f"GraphQL yanıtı JSON olarak ayrıştırılamadı. Yanıt: {response.text}")
             return None
 
+    
+
 # --- Ana Çalışma Akışı ---
 if __name__ == "__main__":
     # İstemciyi oluştur
     client = ApiClient(LOGIN_URL, GRAPHQL_URL, LOGIN_EMAIL, LOGIN_PASSWORD, token_key=TOKEN_KEY)
 
     # GraphQL sorgusunu çalıştır (gerekirse otomatik giriş yapacak)
-    profile_data = client.execute_graphql(GET_PROFILE_QUERY)
+    #profile_data = client.execute_graphql(GET_PROFILE_QUERY)
+    bocek_veriler = goruntu_tespit_bocek()
+    print("\nBöcek Verileri:")
+    #print(bocek_veriler)
+
+    # 1. Böcek gözlemlerini gönder
+    if bocek_veriler: # Eğer goruntu_tespit_bocek'ten veri geldiyse
+        print("\n--- Böcek Gözlemleri Sunucuya Gönderiliyor ---")
+ 
+        # `goruntu_tespit_bocek` fonksiyonundan gelen her bir sözlük
+        # zaten `CreateGozlemlerDto` formatına uygun olmalı.
+        print(f"Gönderilen Gözlem Tipi: {bocek_veriler[0].get('gozlem_tipi')}, Algılanan Nesne Sayısı: {bocek_veriler[0].get('sayisal_deger')}")
+
+        # Mutation için gerekli değişkenleri hazırla
+        # Değişken adı ('createGozlemData') mutation string'indeki ile aynı olmalı
+        variables_for_mutation = {
+            "createGozlemData": bocek_veriler[0]
+        }
+
+        # execute_graphql fonksiyonunu mutation ve değişkenlerle çağır
+        gozlem_olusturma_sonucu = client.execute_graphql(
+            CREATE_GOZLEMLER_MUTATION,
+            variables=variables_for_mutation
+        )
+
+        if gozlem_olusturma_sonucu:
+            print("Gözlem başarıyla oluşturuldu:")
+            print("type: ", type(gozlem_olusturma_sonucu))
+            print("keys: ", gozlem_olusturma_sonucu.keys())
+            print("type createGozlem: ", type(gozlem_olusturma_sonucu["createGozlem"]))
+            print("keys createGozlem: ", gozlem_olusturma_sonucu["createGozlem"].keys())
+            print("keys createGozlem ID: ", gozlem_olusturma_sonucu["createGozlem"]["id"])
+            #print(json.dumps(gozlem_olusturma_sonucu, indent=2))
+            if bocek_veriler[0].get('sayisal_deger') > 1:
+                variables_for_tespit = { 
+                    "createTespitData": {
+                        "gozlemId": gozlem_olusturma_sonucu["createGozlem"]['id'],  # Gözlem ID'sini kullan
+                        "tespit_tipi": "hastalik_tespiti",
+                        "guven_skoru": 0.95,  # Örnek güven skoru, gerçek değeri ile değiştirin
+                        "sinirlayici_kutu_verisi": "swgwe"
+                    }
+                }
+                tespit_sonucu = client.execute_graphql(CREATE_TESTPIT_MUTATION,variables=variables_for_tespit)
+        else:
+            print("Gözlem oluşturulamadı veya hata oluştu.")
+        print("-" * 20) # Gözlemler arasına ayırıcı koy
+
+    else:
+        print("\nGönderilecek böcek gözlemi bulunamadı.")
+
+    hastalik_veriler = goruntu_tespit_hastalik()
+    print("\nHastalık Verileri:")
+    #print(hastalik_veriler)
+
+
+
+    # 1. Böcek gözlemlerini gönder
+    if hastalik_veriler: # Eğer goruntu_tespit_bocek'ten veri geldiyse
+        print("\n--- Böcek Gözlemleri Sunucuya Gönderiliyor ---")
+ 
+        # `goruntu_tespit_bocek` fonksiyonundan gelen her bir sözlük
+        # zaten `CreateGozlemlerDto` formatına uygun olmalı.
+        print(f"Gönderilen Gözlem Tipi: {hastalik_veriler[0].get('gozlem_tipi')}, Algılanan Nesne Sayısı: {hastalik_veriler[0].get('sayisal_deger')}")
+
+        # Mutation için gerekli değişkenleri hazırla
+        # Değişken adı ('createGozlemData') mutation string'indeki ile aynı olmalı
+        variables_for_mutation = {
+            "createGozlemData": hastalik_veriler[0]
+        }
+
+        # execute_graphql fonksiyonunu mutation ve değişkenlerle çağır
+        gozlem_olusturma_sonucu = client.execute_graphql(
+            CREATE_GOZLEMLER_MUTATION,
+            variables=variables_for_mutation
+        )
+
+        if gozlem_olusturma_sonucu:
+            print("Gözlem başarıyla oluşturuldu:")
+            #print(json.dumps(gozlem_olusturma_sonucu, indent=2))
+
+            print("type: ", type(gozlem_olusturma_sonucu))
+            print("keys: ", gozlem_olusturma_sonucu.keys())
+            print("type createGozlem: ", type(gozlem_olusturma_sonucu["createGozlem"]))
+            print("keys createGozlem: ", gozlem_olusturma_sonucu["createGozlem"].keys())
+            #print(json.dumps(gozlem_olusturma_sonucu, indent=2))
+            if bocek_veriler[0].get('sayisal_deger') > 1:
+                variables_for_tespit = { 
+                    "createTespitData": {
+                        "gozlemId": gozlem_olusturma_sonucu["createGozlem"]['id'],  # Gözlem ID'sini kullan
+                        "tespit_tipi": "hastalik_tespiti",
+                        "guven_skoru": 0.95,  # Örnek güven skoru, gerçek değeri ile değiştirin
+                        "sinirlayici_kutu_verisi": "swgwe"
+                    }
+                }
+                tespit_sonucu = client.execute_graphql(CREATE_TESTPIT_MUTATION,variables=variables_for_tespit)
+
+            
+        else:
+            print("Gözlem oluşturulamadı veya hata oluştu.")
+        print("-" * 20) # Gözlemler arasına ayırıcı koy
+
+    else:
+        print("\nGönderilecek böcek gözlemi bulunamadı.")
+
 
     #burada raspberryPi'den gelen verileri alıp işleyebilirsiniz
+    #sırası ile böcek verisi kontrolü
+    #gozlem
+    #varsa uyarı
+    #sırası ile hastalık verisi kontrolü
+    #gozlem
     #gozlem
     #tespit
     #varsa uyarı
 
+    """
     if profile_data:
         print("\nProfil Bilgisi:")
         print(json.dumps(profile_data, indent=2))
     else:
         print("\nProfil bilgisi alınamadı.")
 
-    """
+    
     # --- Token Süresinin Dolduğunu Simüle Etme (İsteğe Bağlı Test) ---
     if client.token: # Eğer ilk sorgu başarılıysa ve token varsa
         print("\n--- Token süresinin dolduğunu simüle edelim ---")
