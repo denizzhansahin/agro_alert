@@ -1,0 +1,136 @@
+nest js için build için dist/main yolunu düzgün seç
+Google Cloud:
+gcloud services enable compute.googleapis.com
+    2  gcloud compute firewall-rules create allow-http --allow tcp:80 --source-ranges 0.0.0.0/0 --target-tags http-server --description "Allow HTTP traffic"
+    3  gcloud compute firewall-rules create allow-https --allow tcp:443 --source-ranges 0.0.0.0/0 --target-tags https-server --description "Allow HTTPS traffic"
+    4  # Bu komutu kendi terminalinizde (VM içinde değil) veya Cloud Shell'de çalıştırın
+    5  gcloud compute firewall-rules create allow-tcp-5000     --allow tcp:5000     --source-ranges 0.0.0.0/0     --target-tags http-server  # VM'inize atadığınız etiketi kullanın (örn: http-server)
+    6  gcloud compute firewall-rules create allow-tcp-3000     --allow tcp:3000     --source-ranges 0.0.0.0/0     --target-tags http-server  # VM'inize atadığınız etiketi kullanın (örn: http-server)
+    7  # Bu komutu kendi terminalinizde veya Google Cloud Shell'de çalıştırın
+    8  # (VM içinde SSH ile bağlıyken değil)
+    9  gcloud compute firewall-rules create allow-tcp-3000     --network=default     --allow tcp:3000     --source-ranges 0.0.0.0/0     --target-tags http-server     --description "Allow external TCP access to port 3000"
+   10  gcloud compute firewall-rules describe allow-tcp-3000 --format=yaml
+
+
+
+Linux ngnix kodu:
+  GNU nano 8.3                                                                    /etc/nginx/sites-available/nest-app                                                                             
+server {
+    listen 80;
+    server_name 34.71.80.28; # Alan adınızı da ekleyebilirsiniz: sizin-alan-adiniz.com
+
+    # Log dosyaları (önerilir)
+    access_log /var/log/nginx/my-app.access.log;
+    error_log /var/log/nginx/my-app.error.log;
+
+    # === NestJS (Kök Dizin /) ===
+    location / {
+        proxy_pass http://127.0.0.1:5000; # NestJS portu
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade'; # WebSocket desteği için
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # === NextJS (Alt Dizin /web/) ===
+
+    # === NextJS (Alt Dizin /web/) ===
+    location /web/ {
+        # Gelen istekten /web/ kısmını kaldır
+        rewrite ^/web/(.*)$ /$1 break;
+
+        proxy_pass http://127.0.0.1:3000; # NextJS portu
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade; # HMR için gerekli
+        proxy_set_header Connection "upgrade"; # HMR için gerekli
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # === NextJS Statik Dosyaları ve HMR için EK AYAR ===
+    # Next.js bu dosyaları /_next/... olarak ister.
+    # /web/_next/... değil. Bu yüzden ayrı bir location bloğu gerekebilir.
+    location /_next/ {
+        proxy_pass http://127.0.0.1:3000; # NextJS portu
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        # Cache ayarları eklenebilir (production build için daha önemli)
+    }
+
+    # HMR WebSocket için (genellikle /_next/webpack-hmr)
+    # Yukarıdaki /_next/ bloğu bunu kapsayabilir, ama gerekirse ayrı eklenebilir.
+    # location /_next/webpack-hmr {
+    #    proxy_pass http://127.0.0.1:3000;
+    #    proxy_http_version 1.1;
+    #    proxy_set_header Upgrade $http_upgrade;
+    #    proxy_set_header Connection "upgrade";
+    #    proxy_set_header Host $host;
+    #}
+}
+
+
+
+Linux:
+
+   17  history
+denshn66sahin@instance-20250504-170434:~/agro_alert/agro_alert_web/app/pages/giris$ sudo cat /var/log/auth.log | grep "COMMAND"
+2025-05-04T17:11:42.994221+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin ; USER=root ; COMMAND=/usr/bin/apt update
+2025-05-04T17:11:53.902384+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin ; USER=root ; COMMAND=/usr/bin/apt upgrade -y
+2025-05-04T17:17:44.241150+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin ; USER=root ; COMMAND=/usr/bin/apt install gnome gnome-shell
+2025-05-04T17:23:26.035783+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin ; USER=root ; COMMAND=/usr/sbin/reboot
+2025-05-04T17:23:34.998732+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin ; USER=root ; COMMAND=/usr/sbin/reboot
+2025-05-04T17:23:37.678038+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin ; USER=root ; COMMAND=/usr/sbin/reboot
+2025-05-04T17:36:14.183538+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_backend ; USER=root ; COMMAND=/usr/bin/apt-get install nano
+2025-05-04T17:51:20.472513+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_backend ; USER=root ; COMMAND=/usr/bin/apt install nginx
+2025-05-04T17:52:12.300463+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_backend ; USER=root ; COMMAND=/usr/bin/nano /etc/nginx/sites-available/nest-app
+2025-05-04T17:56:13.393365+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_backend ; USER=root ; COMMAND=/usr/bin/nano /etc/nginx/sites-available/nest-app
+2025-05-04T17:56:39.757668+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_backend ; USER=root ; COMMAND=/usr/bin/ln -s /etc/nginx/sites-available/nest-app /etc/nginx/sites-enabled/
+2025-05-04T17:56:39.772813+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_backend ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2025-05-04T18:12:31.369416+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_backend ; USER=root ; COMMAND=/usr/sbin/ufw status
+2025-05-04T18:12:39.028542+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_backend ; USER=root ; COMMAND=/usr/sbin/ufw allow 5000/tcp
+2025-05-04T18:26:00.484261+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/nano /etc/nginx/sites-available/nest-app
+2025-05-04T18:27:24.736803+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/ln -s /etc/nginx/sites-available/nest-app /etc/nginx/sites-enabled/
+2025-05-04T18:27:35.198093+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2025-05-04T18:27:38.496759+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2025-05-04T18:28:01.348361+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2025-05-04T18:28:03.646119+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2025-05-04T18:32:46.836959+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2025-05-04T18:32:54.244157+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/ln -s /etc/nginx/sites-available/nest-app /etc/nginx/sites-enabled/
+2025-05-04T18:33:04.137738+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/nano /etc/nginx/sites-available/nest-app
+2025-05-04T18:34:16.406921+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/ln -s /etc/nginx/sites-available/nest-app /etc/nginx/sites-enabled/
+2025-05-04T18:34:21.172962+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2025-05-04T18:35:39.358073+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/sbin/nginx -t
+2025-05-04T18:35:51.258257+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/systemctl status nginx.service
+2025-05-04T18:36:04.726578+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/journalctl -xeu nginx.service
+2025-05-04T18:37:17.127725+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/nano /etc/nginx/sites-available/nest-app
+2025-05-04T18:39:06.845149+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/ln -s /etc/nginx/sites-available/nest-app /etc/nginx/sites-enabled/
+2025-05-04T18:39:15.486527+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2025-05-04T18:39:43.965478+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/nano /etc/nginx/sites-available/nest-app
+2025-05-04T18:42:06.417689+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/nano /etc/nginx/sites-available/nest-app
+2025-05-04T18:42:36.586684+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2025-05-04T18:42:40.615062+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/ln -s /etc/nginx/sites-available/nest-app /etc/nginx/sites-enabled/
+2025-05-04T18:42:42.857089+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2025-05-04T18:43:59.865328+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/nano /etc/nginx/sites-available/nest-app
+2025-05-04T18:44:25.415207+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2025-05-04T18:45:47.556163+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/nano /etc/nginx/sites-available/nest-app
+2025-05-04T18:46:35.998182+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2025-05-04T18:46:42.291447+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/nano /etc/nginx/sites-available/nest-app
+2025-05-04T18:46:58.894818+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2025-05-04T18:50:29.973538+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/nano /etc/nginx/sites-available/nest-app
+2025-05-04T18:51:12.327367+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/nano /etc/nginx/sites-available/nest-app
+2025-05-04T18:51:58.826987+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2025-05-04T18:53:39.699062+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/nano /etc/nginx/sites-available/nest-app
+2025-05-04T18:56:02.533390+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+2025-05-04T18:58:15.764745+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/0 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web ; USER=root ; COMMAND=/usr/bin/nano /etc/nginx/sites-available/nest-app
+2025-05-04T19:23:33.064906+00:00 instance-20250504-170434 sudo: denshn66sahin : TTY=pts/2 ; PWD=/home/denshn66sahin/agro_alert/agro_alert_web/app/pages/giris ; USER=root ; COMMAND=/usr/bin/cat /var/log/auth.log
+denshn66sahin@instance-20250504-170434:~/agro_alert/agro_alert_web/app/pages/giris$ 
+
